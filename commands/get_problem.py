@@ -1,3 +1,4 @@
+from commands import THIS_MODULE
 import requests
 import bs4
 import re
@@ -5,8 +6,9 @@ import argparse
 import os
 import sys
 import json
+from . import THIS_MODULE
 
-from logger import logger
+from .logger import logger
 
 LOGIN_URL = "https://atcoder.jp/login?continue="
 
