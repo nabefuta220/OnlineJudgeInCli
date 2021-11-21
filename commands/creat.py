@@ -1,9 +1,9 @@
 import argparse
 import subprocess
-import get_problem
+from . import get_problem
 import json
 
-from logger import logger
+from .logger import logger
 def input():
 	parse = argparse.ArgumentParser('creat')
 	parse.add_argument('file')
