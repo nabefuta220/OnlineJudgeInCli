@@ -1,7 +1,14 @@
 
+
+import argparse
 from onlinejudge_api.get_contest import main as onlinejudge_run
 from .logger import logger
 import onlinejudge.dispatch as dispatch
+
+def add_subparser(subparser:argparse.Action) -> None:
+    parser_get_contest=subparser.add_parser('get-contest')
+    parser_get_contest.add_argument('url')
+    parser_get_contest.add_argument('contest_name')
 
 
 def generate(url: str) -> dict[str, str]:

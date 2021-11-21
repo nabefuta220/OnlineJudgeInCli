@@ -4,6 +4,9 @@ from re import template
 import sys
 import subprocess
 import argparse
+
+from commands.generate import generate
+from .generateTemplate import add_subparser as add_gen_temp
 from .generateTemplate import generate as gen_temp
 cxxflag = '-std=gnu++17 -Wall -Wextra -O2'
 oj_testflag = ''
@@ -15,6 +18,23 @@ sys.path.append(home)
 if '/home/nabefuta/atcoder' in sys.path:
 	from .import tracker
 
+def prepara_arg()->argparse.ArgumentParser:
+	"""
+	コマンドラインの取得の準備をする
+
+	Returns
+	-------
+	parser: argparse.ArgumentParser
+		コマンドラインのオブジェクト
+	"""
+	#メインパーサーを作成する
+	parser=argparse.ArgumentParser('tools')
+	#サブコマンド用のパーサーを作成する
+	subparser=parser.add_subparsers(dest='subcommand')
+	#各コマンドごとのパーサを追加する
+	add_gen_temp(subparser)#generate-template用
+
+	return parser
 
 def input_arg():
 	"""
@@ -28,7 +48,7 @@ def input_arg():
 		'--incdir', default='-I /home/nabefuta/atcoder/ac-library', help='at-llibaryのパス')
 
 	parse.add_argument('--target', default='Main', help='ソースファイル')
-	parse.add_argument('--cxx', default='g++', help='c++のコンパイラ', )
+	parse.add_argument('--cxx', default='g++', help='c++のコンパイラ')
 
 	args = parse.parse_args()
 
@@ -98,12 +118,20 @@ def submittdNtrack(target):
 	subprocess.run(shell=True, args=command)
 
 
-def tools(arg: dict):
+def tools(arg):
 	"""
 	コマンドを実行する
 	"""
-	mode = arg['mode']
-	if mode == 'test':
+	if arg.subcommand in 'get-contest':
+		#コンテストの問題を取得し、問題をダウンロードする
+		res=gen_temp(arg.url)
+		generate(res,arg.contest_name)
+	elif arg.subcommand in 'generate':
+		#問題をダウンロードする
+		res=gen_temp(arg.url)
+		generate(res,arg.contest_name)
+		pass
+	elif mode == 'test':
 		bulid(arg['cxx'], arg['cxxflag'], arg['incdir'], arg['target'], '-DLOCAL')
 		exert(arg['target'])
 	elif mode == 'cheak':
@@ -120,11 +148,10 @@ def tools(arg: dict):
 		submittdNtrack(arg['target']+'.cpp')
 	elif mode == 'expand':
 		expand(arg['target']+'.cpp')
-	elif mode == 'get-contest':
-		#コンテストの問題を取得する
-		res=gen_temp(arg['url'])
-		print(res)
+
 
 def main():
-	arg = input_arg()
+	prase=prepara_arg()
+	arg=prase.parse_args()
+	#arg = input_arg()
 	tools(arg)
