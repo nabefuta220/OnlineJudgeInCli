@@ -8,6 +8,11 @@ import onlinejudge.dispatch as dispatch
 def add_subparser(subparser:argparse.Action) -> None:
     """
     ここのサブコマンド用引数を追加する
+
+    Parameters
+    ----------
+    subparser : argparse.Action
+        サブコマンドを格納するパーサー
     """
     parser_get_contest=subparser.add_parser('get-contest')
     parser_get_contest.add_argument('url')
