@@ -1,5 +1,6 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
+import json
 from re import template
 import sys
 import subprocess
@@ -7,6 +8,7 @@ import argparse
 
 from commands.generate import generate
 from .generateTemplate import add_subparser as add_gen_temp
+from .generate import add_subparser as add_gen
 from .generateTemplate import generate as gen_temp
 cxxflag = '-std=gnu++17 -Wall -Wextra -O2'
 oj_testflag = ''
@@ -33,7 +35,7 @@ def prepara_arg()->argparse.ArgumentParser:
 	subparser=parser.add_subparsers(dest='subcommand')
 	#各コマンドごとのパーサを追加する
 	add_gen_temp(subparser)#generate-template用
-
+	add_gen(subparser)#generate 用
 	return parser
 
 def input_arg():
@@ -128,7 +130,8 @@ def tools(arg):
 		generate(res,arg.contest_name)
 	elif arg.subcommand in 'generate':
 		#問題をダウンロードする
-		res=gen_temp(arg.url)
+		with open(arg.file, 'r') as f:
+			res = json.load(f)
 		generate(res,arg.contest_name)
 		pass
 	elif mode == 'test':

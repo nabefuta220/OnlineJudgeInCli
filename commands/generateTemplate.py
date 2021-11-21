@@ -6,6 +6,9 @@ from .logger import logger
 import onlinejudge.dispatch as dispatch
 
 def add_subparser(subparser:argparse.Action) -> None:
+    """
+    ここのサブコマンド用引数を追加する
+    """
     parser_get_contest=subparser.add_parser('get-contest')
     parser_get_contest.add_argument('url')
     parser_get_contest.add_argument('contest_name')
