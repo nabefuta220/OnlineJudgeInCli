@@ -1,6 +1,6 @@
-from logger import logger
+from .logger import logger
 
-from get_problem import login, get_html, LOGIN_URL
+from .get_problem import login, get_html, LOGIN_URL
 import time
 import requests
 import bs4
