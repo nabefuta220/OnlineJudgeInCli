@@ -122,8 +122,8 @@ def tools(arg: dict):
 		expand(arg['target']+'.cpp')
 	elif mode == 'get-contest':
 		#コンテストの問題を取得する
-		gen_temp(arg['url'])
-		
+		res=gen_temp(arg['url'])
+		print(res)
 
 def main():
 	arg = input_arg()
