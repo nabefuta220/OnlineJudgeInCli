@@ -148,7 +148,6 @@ def get_problem(url, file,config_file):
 
 	get_html(url, file+'_tmp.html', session)
 	parse(file+'_tmp.html',file)
-	# run(url, file, session)
 
 
 if __name__ == "__main__":

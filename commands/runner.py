@@ -10,6 +10,8 @@ from commands.generate import generate
 from .generateTemplate import add_subparser as add_gen_temp
 from .generate import add_subparser as add_gen
 from .generateTemplate import generate as gen_temp
+from .creat import add_subparser as add_creat
+from .creat import creat
 cxxflag = '-std=gnu++17 -Wall -Wextra -O2'
 oj_testflag = ''
 
@@ -36,6 +38,7 @@ def prepara_arg()->argparse.ArgumentParser:
 	#各コマンドごとのパーサを追加する
 	add_gen_temp(subparser)#generate-template用
 	add_gen(subparser)#generate 用
+	add_creat(subparser)#creat 用
 	return parser
 
 def input_arg():
@@ -133,7 +136,8 @@ def tools(arg):
 		with open(arg.file, 'r') as f:
 			res = json.load(f)
 		generate(res,arg.contest_name,arg.config_file)
-		pass
+	elif arg.subcommand in 'creat':
+		creat(arg.file,arg.url,arg.config_file)
 	elif mode == 'test':
 		bulid(arg['cxx'], arg['cxxflag'], arg['incdir'], arg['target'], '-DLOCAL')
 		exert(arg['target'])

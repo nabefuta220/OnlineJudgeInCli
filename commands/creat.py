@@ -1,20 +1,29 @@
 import argparse
 import subprocess
-from . import get_problem
+from . import CONFIG_FILE, get_problem
 import json
+import os
 
 from .logger import logger
-def input():
-	parse = argparse.ArgumentParser('creat')
-	parse.add_argument('file')
-	parse.add_argument('config_file')
-	parse.add_argument('-u', '--URL')
-	args = parse.parse_args()
-	return {'file': args.file, 'url': args.URL, 'config_file': args.config_file}
+
+
+def add_subparser(subparser: argparse.Action) -> None:
+	"""
+	ここのサブコマンド用引数を追加する
+
+	Parameters
+	----------
+	subparser : argparse.Action
+			サブコマンドを格納するパーサー
+	"""
+	parser_create = subparser.add_parser('creat')
+	parser_create.add_argument('file')
+	parser_create.add_argument('--config_file','-c', default=CONFIG_FILE)
+	parser_create.add_argument('-u', '--url')
 
 
 def creat(file, url,config_file):
-	subprocess.run("mkdir -p " + file, shell=True)
+	os.mkdir(file)
 	try:
 		with open(config_file, 'r') as f:
 			q = json.load(f)["preset"]
@@ -23,21 +32,16 @@ def creat(file, url,config_file):
 					for strings in q[file_name]:
 						f2.write(strings + "\n")
 				logger.info("created "+file + "/" + file_name)
-				if file_name=='tools':
-					subprocess.run(shell=True, args='chmod u+x %s' % (file + "/" + file_name))
-					logger.info(f"gave permission (exe) in {file}/{file_name}")
+				
 	except FileNotFoundError as e:
 		logger.error(f'configfile : {config_file} not found')
 
-	if url != None and url != "":
+	if url :
 		try:
-			subprocess.run("cd " + file + " && oj d " + url, shell=True)
+			subprocess.run(f"cd {file} && oj d {url}", shell=True)
 		except Exception as e:
 			print(e)
 		else:
 			get_problem.get_problem(url, file+ "/"+url.split("/")[-1]+".md",config_file)
 
 
-if __name__ == "__main__":
-	res = input()
-	creat(res['file'], res['url'], res['config_file'])
