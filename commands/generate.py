@@ -6,20 +6,21 @@ from .import creat
 from .logger import logger
 
 def add_subparser(subparser:argparse.Action) -> None:
-    """
-    ここのサブコマンド用引数を追加する
-    """
-    parser_get_contest=subparser.add_parser('generate')
-    parser_get_contest.add_argument('file')
-    parser_get_contest.add_argument('contest_name')
+	"""
+	ここのサブコマンド用引数を追加する
+	"""
+	parser_get_contest=subparser.add_parser('generate')
+	parser_get_contest.add_argument('file')
+	parser_get_contest.add_argument('contest_name')
+	parser_get_contest.add_argument('--config_file',default=CONFIG_FILE)
 
-def generate(problems:dict[str,str],contest_name:str):
+def generate(problems:dict[str,str],contest_name:str,config_file):
 	"""
 	コンテスト名と問題名、URLを読み込み、コンテスト名のディレクトリに回答用環境をいれる
 	"""
 	
 	for folder, url in problems.items():
 			#creat.creat(folder, url, load_file)
-			creat.creat(f"{contest_name}/{folder}", url, CONFIG_FILE)
+			creat.creat(f"{contest_name}/{folder}", url, config_file)
 if __name__ == '__main__':
 	generate('config.json')

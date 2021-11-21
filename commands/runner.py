@@ -132,7 +132,7 @@ def tools(arg):
 		#問題をダウンロードする
 		with open(arg.file, 'r') as f:
 			res = json.load(f)
-		generate(res,arg.contest_name)
+		generate(res,arg.contest_name,arg.config_file)
 		pass
 	elif mode == 'test':
 		bulid(arg['cxx'], arg['cxxflag'], arg['incdir'], arg['target'], '-DLOCAL')
