@@ -1,17 +1,20 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
-import json
-from re import template
-import sys
-import subprocess
 import argparse
+import json
+import subprocess
+import sys
+from re import template
 
+from commands.bulid import add_subparser as add_build, bulid
 from commands.generate import generate
-from .generateTemplate import add_subparser as add_gen_temp
-from .generate import add_subparser as add_gen
-from .generateTemplate import generate as gen_temp
+
 from .creat import add_subparser as add_creat
 from .creat import creat
+from .generate import add_subparser as add_gen
+from .generateTemplate import add_subparser as add_gen_temp
+from .generateTemplate import generate as gen_temp
+
 cxxflag = '-std=gnu++17 -Wall -Wextra -O2'
 oj_testflag = ''
 
@@ -20,7 +23,7 @@ home = '/home/nabefuta/atcoder'
 sys.path.append(home)
 
 if '/home/nabefuta/atcoder' in sys.path:
-	from .import tracker
+	from . import tracker
 
 def prepara_arg()->argparse.ArgumentParser:
 	"""
@@ -39,6 +42,7 @@ def prepara_arg()->argparse.ArgumentParser:
 	add_gen_temp(subparser)#generate-template用
 	add_gen(subparser)#generate 用
 	add_creat(subparser)#creat 用
+	add_build(subparser)#build 用
 	return parser
 
 def input_arg():
@@ -62,23 +66,10 @@ def input_arg():
 	return dict
 
 
-def bulid(cxx, cxxflag,  incdir, target, macro=''):
-	"""
-	コンパイルする
-	"""
-	command = '%s %s %s %s -o %s %s' % (cxx, cxxflag,
-										macro, incdir, target+'.out', target+'.cpp')
-	res = subprocess.run(shell=True, args=command)
-	if res.returncode != 0:
-		exit()
 
 
-def exert(target):
-	"""
-	実行する
-	"""
-	command = './%s.out' % (target)
-	subprocess.run(shell=True, args=command)
+
+
 
 
 def cheak(oj_testflag, target):
@@ -138,9 +129,9 @@ def tools(arg):
 		generate(res,arg.contest_name,arg.config_file)
 	elif arg.subcommand in 'creat':
 		creat(arg.file,arg.url,arg.config_file)
-	elif mode == 'test':
-		bulid(arg['cxx'], arg['cxxflag'], arg['incdir'], arg['target'], '-DLOCAL')
-		exert(arg['target'])
+	elif arg.subcommand in 'test':
+		bulid(arg.file)
+		exert(arg.file)
 	elif mode == 'cheak':
 		bulid(arg['cxx'], arg['cxxflag'], arg['incdir'],
 			  arg['target'], '-DONLINE_JUDGE')
