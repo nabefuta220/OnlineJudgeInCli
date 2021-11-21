@@ -15,10 +15,10 @@ def add_subparser(subparser: argparse.Action) -> None:
     subparser : argparse.Action
             サブコマンドを格納するパーサー
     """
-    parser_get_contest = subparser.add_parser('generate')
-    parser_get_contest.add_argument('file')
-    parser_get_contest.add_argument('contest_name')
-    parser_get_contest.add_argument('--config_file', default=CONFIG_FILE)
+    parser_generate = subparser.add_parser('generate')
+    parser_generate.add_argument('file')
+    parser_generate.add_argument('contest_name')
+    parser_generate.add_argument('--config_file', default=CONFIG_FILE)
 
 
 def generate(problems: dict[str, str], contest_name: str, config_file: str):

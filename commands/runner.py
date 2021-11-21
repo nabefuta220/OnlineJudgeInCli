@@ -4,11 +4,18 @@ import argparse
 import json
 import subprocess
 import sys
+from logging import INFO, StreamHandler, basicConfig, getLogger
 from re import template
 
-from commands.bulid import add_subparser as add_build, bulid
+import onlinejudge_command.log_formatter as log_formatter
+
+from commands.bulid import add_subparser as add_build
+from commands.bulid import bulid, exert
+from commands.cheak import add_subparser as add_cheak
+from commands.cheak import cheak
 from commands.generate import generate
 
+from .cheak import add_subparser as add_test
 from .creat import add_subparser as add_creat
 from .creat import creat
 from .generate import add_subparser as add_gen
@@ -21,6 +28,7 @@ oj_testflag = ''
 home = '/home/nabefuta/atcoder'
 
 sys.path.append(home)
+logger = getLogger(__name__)
 
 if '/home/nabefuta/atcoder' in sys.path:
 	from . import tracker
@@ -43,6 +51,9 @@ def prepara_arg()->argparse.ArgumentParser:
 	add_gen(subparser)#generate 用
 	add_creat(subparser)#creat 用
 	add_build(subparser)#build 用
+	add_cheak(subparser)#cheak用
+	add_test(subparser)#test用
+	
 	return parser
 
 def input_arg():
@@ -64,20 +75,6 @@ def input_arg():
 	dict = {'mode': args.mode, 'url': args.URL, 'incdir': args.incdir,
 		'target': args.target, 'cxx': args.cxx, 'oj_testflag': oj_testflag, 'cxxflag': cxxflag}
 	return dict
-
-
-
-
-
-
-
-
-def cheak(oj_testflag, target):
-	"""
-	テストケースを実行する
-	"""
-	command = 'oj t -N -S %s -c %s' % (oj_testflag, './' + target)
-	subprocess.run(shell=True, args=command)
 
 
 def submitte(target):
@@ -114,28 +111,28 @@ def submittdNtrack(target):
 	subprocess.run(shell=True, args=command)
 
 
-def tools(arg):
+def tools(arg:argparse.Namespace):
 	"""
 	コマンドを実行する
 	"""
-	if arg.subcommand in 'get-contest':
+	print(arg.subcommand)
+	if arg.subcommand in ['get-contest']:
 		#コンテストの問題を取得し、問題をダウンロードする
 		res=gen_temp(arg.url)
-		generate(res,arg.contest_name)
-	elif arg.subcommand in 'generate':
+		generate(res,arg.contest_name,arg.config_file)
+	elif arg.subcommand in ['generate']:
 		#問題をダウンロードする
 		with open(arg.file, 'r') as f:
 			res = json.load(f)
 		generate(res,arg.contest_name,arg.config_file)
-	elif arg.subcommand in 'creat':
+	elif arg.subcommand in ['creat']:
 		creat(arg.file,arg.url,arg.config_file)
-	elif arg.subcommand in 'test':
-		bulid(arg.file)
-		exert(arg.file)
-	elif mode == 'cheak':
-		bulid(arg['cxx'], arg['cxxflag'], arg['incdir'],
-			  arg['target'], '-DONLINE_JUDGE')
-		cheak(arg['oj_testflag'], arg['target']+'.out')
+	elif arg.subcommand in ['exe']:
+		bulid(arg.test)
+		exert(arg.test)
+	elif arg.subcommand in ['test'] :
+		bulid(arg.test)
+		cheak(arg)
 	elif mode == 'sub':
 		submitte(arg['target']+'.cpp')
 	elif mode == 'init':
@@ -149,7 +146,10 @@ def tools(arg):
 
 
 def main():
+	level = INFO
+	handler = StreamHandler(sys.stdout)
+	handler.setFormatter(log_formatter.LogFormatter())
+	basicConfig(level=level, handlers=[handler])
 	prase=prepara_arg()
 	arg=prase.parse_args()
-	#arg = input_arg()
 	tools(arg)

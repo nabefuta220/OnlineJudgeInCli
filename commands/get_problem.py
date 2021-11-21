@@ -6,11 +6,11 @@ import argparse
 import os
 import sys
 import json
-from . import THIS_MODULE
+from . import LOGIN_URL, THIS_MODULE
 
 from .logger import logger
 
-LOGIN_URL = "https://atcoder.jp/login?continue="
+
 
 
 def input():

@@ -23,7 +23,7 @@ def add_subparser(subparser: argparse.Action) -> None:
 
 
 def creat(file, url,config_file):
-	os.mkdir(file)
+	os.makedirs(file)
 	try:
 		with open(config_file, 'r') as f:
 			q = json.load(f)["preset"]
