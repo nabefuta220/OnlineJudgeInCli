@@ -1,3 +1,4 @@
+from logging import getLogger
 from commands import THIS_MODULE
 import requests
 import bs4
@@ -8,7 +9,7 @@ import sys
 import json
 from . import LOGIN_URL, THIS_MODULE
 
-from .logger import logger
+logger=getLogger(__name__)
 
 
 

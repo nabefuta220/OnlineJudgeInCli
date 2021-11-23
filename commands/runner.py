@@ -8,12 +8,14 @@ from logging import INFO, StreamHandler, basicConfig, getLogger
 from re import template
 
 import onlinejudge_command.log_formatter as log_formatter
+from commands.submit import submit
 
 from commands.bulid import add_subparser as add_build
 from commands.bulid import bulid, exert
 from commands.cheak import add_subparser as add_cheak
 from commands.cheak import cheak
 from commands.generate import generate
+from commands.submit import add_subparser as add_sub
 
 from .cheak import add_subparser as add_test
 from .creat import add_subparser as add_creat
@@ -53,7 +55,7 @@ def prepara_arg()->argparse.ArgumentParser:
 	add_build(subparser)#build 用
 	add_cheak(subparser)#cheak用
 	add_test(subparser)#test用
-	
+	add_sub(subparser)
 	return parser
 
 def input_arg():
@@ -61,8 +63,7 @@ def input_arg():
 	コマンドラインからの入力を受け付ける
 	"""
 	parse = argparse.ArgumentParser('tools')
-	parse.add_argument('mode', choices=[
-					   'test', 'cheak', 'sub', 'track', 'init', 'subntrack', 'expand', 'get-contest'])
+	#parse.add_argument('mode', choices=[					   'test', 'cheak', 'sub', 'track', 'init', 'subntrack', 'expand', 'get-contest'])
 	parse.add_argument('-u', '--URL', default='test', help='問題URL,もしくは提出結果のURL')
 	parse.add_argument(
 		'--incdir', default='-I /home/nabefuta/atcoder/ac-library', help='at-llibaryのパス')
@@ -77,12 +78,6 @@ def input_arg():
 	return dict
 
 
-def submitte(target):
-	"""
-	提出する
-	"""
-	command = 'oj s %s --no-open' % (target)
-	subprocess.run(shell=True, args=command)
 
 
 def init(url):
@@ -133,8 +128,8 @@ def tools(arg:argparse.Namespace):
 	elif arg.subcommand in ['test'] :
 		bulid(arg.test)
 		cheak(arg)
-	elif mode == 'sub':
-		submitte(arg['target']+'.cpp')
+	elif arg.subcommand in ['submit']:
+		submit(arg)
 	elif mode == 'init':
 		init(arg['url'])
 	elif mode == 'track':

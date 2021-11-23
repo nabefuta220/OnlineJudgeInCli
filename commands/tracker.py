@@ -1,4 +1,7 @@
-from .logger import logger
+from logging import getLogger
+
+
+logger=getLogger(__name__)
 
 from .get_problem import login, get_html, LOGIN_URL
 import time

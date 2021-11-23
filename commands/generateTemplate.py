@@ -1,10 +1,11 @@
 
 
 import argparse
+from logging import getLogger
 from onlinejudge_api.get_contest import main as onlinejudge_run
 
 from commands import CONFIG_FILE
-from .logger import logger
+logger=getLogger(__name__)
 import onlinejudge.dispatch as dispatch
 
 def add_subparser(subparser:argparse.Action) -> None:

@@ -1,9 +1,10 @@
 import argparse
+from logging import getLogger
 from commands import CONFIG_FILE
 from .import creat
 
 
-from .logger import logger
+logger=getLogger(__name__)
 
 
 def add_subparser(subparser: argparse.Action) -> None:

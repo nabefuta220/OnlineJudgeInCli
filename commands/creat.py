@@ -1,10 +1,11 @@
 import argparse
+from logging import getLogger
 import subprocess
 from . import CONFIG_FILE, get_problem
 import json
 import os
 
-from .logger import logger
+logger=getLogger(__name__)
 
 
 def add_subparser(subparser: argparse.Action) -> None:

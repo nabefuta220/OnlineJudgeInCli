@@ -9,7 +9,7 @@ from onlinejudge_command.subcommand.test import add_subparser as add_test
 from onlinejudge_command.main import main 
 from onlinejudge_command.subcommand.test import run
 from pathlib import Path
-from commands.logger import logger
+
 
 logger = getLogger(__name__)
 def add_subparser(subparser:argparse.Action) -> None:

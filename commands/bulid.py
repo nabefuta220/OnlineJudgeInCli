@@ -6,7 +6,6 @@ from logging import getLogger
 import os
 import subprocess
 
-from commands.logger import logger
 
 logger = getLogger(__name__)
 
