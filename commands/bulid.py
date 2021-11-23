@@ -2,10 +2,9 @@
 ファイルのコンパイルと実行を行う
 """
 import argparse
-from logging import getLogger
 import os
 import subprocess
-
+from logging import getLogger
 
 logger = getLogger(__name__)
 

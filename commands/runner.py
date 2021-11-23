@@ -5,35 +5,36 @@ import json
 import subprocess
 import sys
 from logging import INFO, StreamHandler, basicConfig, getLogger
-from re import template
 
 import onlinejudge_command.log_formatter as log_formatter
-from commands.submit import submit
 
+from commands import THIS_MODULE, tracker
 from commands.bulid import add_subparser as add_build
 from commands.bulid import bulid, exert
 from commands.cheak import add_subparser as add_cheak
+from commands.cheak import add_subparser as add_test
 from commands.cheak import cheak
+from commands.creat import add_subparser as add_creat
+from commands.creat import creat
+from commands.expand import add_subparser as add_expand
+from commands.expand import expand
+from commands.generate import add_subparser as add_gen
 from commands.generate import generate
+from commands.generateTemplate import add_subparser as add_gen_temp
+from commands.generateTemplate import generate as gen_temp
+from commands.sub_n_track import add_subparser as add_sub_n
+from commands.sub_n_track import submittdNtrack
 from commands.submit import add_subparser as add_sub
-
-from .cheak import add_subparser as add_test
-from .creat import add_subparser as add_creat
-from .creat import creat
-from .generate import add_subparser as add_gen
-from .generateTemplate import add_subparser as add_gen_temp
-from .generateTemplate import generate as gen_temp
-
-cxxflag = '-std=gnu++17 -Wall -Wextra -O2'
-oj_testflag = ''
+from commands.submit import submit
+from commands.tracker import add_subparser as add_track
+from commands.tracker import track
 
 home = '/home/nabefuta/atcoder'
 
-sys.path.append(home)
+#sys.path.append(home)
 logger = getLogger(__name__)
 
-if '/home/nabefuta/atcoder' in sys.path:
-	from . import tracker
+
 
 def prepara_arg()->argparse.ArgumentParser:
 	"""
@@ -55,55 +56,16 @@ def prepara_arg()->argparse.ArgumentParser:
 	add_build(subparser)#build 用
 	add_cheak(subparser)#cheak用
 	add_test(subparser)#test用
-	add_sub(subparser)
+	add_sub(subparser)#submit用
+	add_expand(subparser)#expand用
+	add_track(subparser)#track用
+	add_sub_n(subparser)#sub_n_track用
 	return parser
 
-def input_arg():
-	"""
-	コマンドラインからの入力を受け付ける
-	"""
-	parse = argparse.ArgumentParser('tools')
-	#parse.add_argument('mode', choices=[					   'test', 'cheak', 'sub', 'track', 'init', 'subntrack', 'expand', 'get-contest'])
-	parse.add_argument('-u', '--URL', default='test', help='問題URL,もしくは提出結果のURL')
-	parse.add_argument(
-		'--incdir', default='-I /home/nabefuta/atcoder/ac-library', help='at-llibaryのパス')
-
-	parse.add_argument('--target', default='Main', help='ソースファイル')
-	parse.add_argument('--cxx', default='g++', help='c++のコンパイラ')
-
-	args = parse.parse_args()
-
-	dict = {'mode': args.mode, 'url': args.URL, 'incdir': args.incdir,
-		'target': args.target, 'cxx': args.cxx, 'oj_testflag': oj_testflag, 'cxxflag': cxxflag}
-	return dict
 
 
 
 
-def init(url):
-	"""
-	テストケースを取得する
-	"""
-	command = 'oj d %s' % (url)
-	subprocess.run(shell=True, args=command)
-
-
-def expand(target):
-	"""
-	ac-libaryを展開する
-	"""
-	command = 'python %s %s --lib %s' % (home +
-										 '/ac-library/expander.py', target, home+'/ac-library/')
-	subprocess.run(shell=True, args=command)
-
-
-def submittdNtrack(target):
-	"""
-	提出して、結果を見る
-	"""
-	command = 'oj s %s --no-open -y | python %s %s' % (
-		target, home+'/sub_n_track.py', home+'/config.json')
-	subprocess.run(shell=True, args=command)
 
 
 def tools(arg:argparse.Namespace):
@@ -116,28 +78,33 @@ def tools(arg:argparse.Namespace):
 		res=gen_temp(arg.url)
 		generate(res,arg.contest_name,arg.config_file)
 	elif arg.subcommand in ['generate']:
-		#問題をダウンロードする
+		#複数の問題をダウンロードする
 		with open(arg.file, 'r') as f:
 			res = json.load(f)
 		generate(res,arg.contest_name,arg.config_file)
 	elif arg.subcommand in ['creat']:
+		#環境構築を行う
 		creat(arg.file,arg.url,arg.config_file)
 	elif arg.subcommand in ['exe']:
+		#実行する
 		bulid(arg.test)
 		exert(arg.test)
 	elif arg.subcommand in ['test'] :
+		#テストを通す
 		bulid(arg.test)
 		cheak(arg)
 	elif arg.subcommand in ['submit']:
+		#提出する
 		submit(arg)
-	elif mode == 'init':
-		init(arg['url'])
-	elif mode == 'track':
-		print(tracker.track(arg['url'], home+'/config.json', 'tmp.html'))
-	elif mode == 'subntrack':
-		submittdNtrack(arg['target']+'.cpp')
-	elif mode == 'expand':
-		expand(arg['target']+'.cpp')
+	elif arg.subcommand in ['expand']:
+		#展開する
+		expand(arg.file,arg.incpath)
+	elif arg.subcommand in ['tracker']:
+		print(track(arg.url,arg.config_file,'tmp.html'))
+	
+	elif arg.subcommand in['subntrack']:
+		submittdNtrack(arg.file,arg.config_file)
+
 
 
 def main():

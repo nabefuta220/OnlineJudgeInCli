@@ -1,6 +1,7 @@
 import re
-from logger import logger
+from logging import getLogger
 
+logger=getLogger(__name__)
 def get_data():
     str = ""
     while (True):
@@ -14,12 +15,10 @@ def get_data():
 
 
 def get_submittion_URL(str):
-    #logger.debug(str)
     matchobj = re.search(
         r'result: \S+', str)
     logger.debug(matchobj.group())
     terget = matchobj.group()[8:]
-    #print("terget url= " + terget)
     return terget
 
 

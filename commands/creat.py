@@ -1,9 +1,10 @@
 import argparse
-from logging import getLogger
-import subprocess
-from . import CONFIG_FILE, get_problem
 import json
 import os
+import subprocess
+from logging import getLogger
+
+from . import CONFIG_FILE, get_problem
 
 logger=getLogger(__name__)
 

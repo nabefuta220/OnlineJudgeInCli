@@ -2,14 +2,14 @@
 ファイルを実行して、検証する
 """
 import argparse
-from logging import getLogger
 import os
-from re import sub
-from onlinejudge_command.subcommand.test import add_subparser as add_test 
-from onlinejudge_command.main import main 
-from onlinejudge_command.subcommand.test import run
+from logging import getLogger
 from pathlib import Path
+from re import sub
 
+from onlinejudge_command.main import main
+from onlinejudge_command.subcommand.test import add_subparser as add_test
+from onlinejudge_command.subcommand.test import run
 
 logger = getLogger(__name__)
 def add_subparser(subparser:argparse.Action) -> None:

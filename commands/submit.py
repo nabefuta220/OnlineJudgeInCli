@@ -1,8 +1,11 @@
 import argparse
-from logging import getLogger
 import os
-from onlinejudge_command.subcommand.submit import add_subparser as add_sub, run
+from logging import getLogger
+
 from onlinejudge.utils import default_cookie_path
+from onlinejudge_command.subcommand.submit import add_subparser as add_sub
+from onlinejudge_command.subcommand.submit import run
+
 logger = getLogger(__name__)
 
 def add_subparser(subparser:argparse.Action) -> None:

@@ -1,12 +1,15 @@
-from logging import getLogger
-from commands import THIS_MODULE
-import requests
-import bs4
-import re
 import argparse
-import os
-import sys
 import json
+import os
+import re
+import sys
+from logging import getLogger
+
+import bs4
+import requests
+
+from commands import THIS_MODULE
+
 from . import LOGIN_URL, THIS_MODULE
 
 logger=getLogger(__name__)
