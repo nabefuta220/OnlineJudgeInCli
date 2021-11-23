@@ -1,13 +1,33 @@
-from .logger import logger
+from logging import getLogger
 
-from .get_problem import login, get_html, LOGIN_URL
-import time
-import requests
-import bs4
-import os
-import re
+from commands import CONFIG_FILE
+
+logger=getLogger(__name__)
 
 import argparse
+import os
+import re
+import time
+
+import bs4
+import requests
+
+from .get_problem import LOGIN_URL, get_html, login
+
+
+def add_subparser(subparser: argparse.Action) -> None:
+    """
+    ここのサブコマンド用引数を追加する
+
+    Parameters
+    ----------
+    subparser : argparse.Action
+            サブコマンドを格納するパーサー
+    """
+    parser_track = subparser.add_parser('tracker')
+    parser_track.add_argument('url')
+    parser_track.add_argument('--config_file', default=CONFIG_FILE)
+
 
 def parse(file):
 	res={}

@@ -1,16 +1,20 @@
-from commands import THIS_MODULE
-import requests
-import bs4
-import re
 import argparse
-import os
-import sys
 import json
-from . import THIS_MODULE
+import os
+import re
+import sys
+from logging import getLogger
 
-from .logger import logger
+import bs4
+import requests
 
-LOGIN_URL = "https://atcoder.jp/login?continue="
+from commands import THIS_MODULE
+
+from . import LOGIN_URL, THIS_MODULE
+
+logger=getLogger(__name__)
+
+
 
 
 def input():
@@ -148,7 +152,6 @@ def get_problem(url, file,config_file):
 
 	get_html(url, file+'_tmp.html', session)
 	parse(file+'_tmp.html',file)
-	# run(url, file, session)
 
 
 if __name__ == "__main__":

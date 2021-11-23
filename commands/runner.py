@@ -1,130 +1,117 @@
 #!/usr/local/bin/python3
 # -*- coding: utf-8 -*-
-from re import template
-import sys
-import subprocess
 import argparse
-from .generateTemplate import generate as gen_temp
-cxxflag = '-std=gnu++17 -Wall -Wextra -O2'
-oj_testflag = ''
+import json
+import subprocess
+import sys
+from logging import INFO, StreamHandler, basicConfig, getLogger
+
+import onlinejudge_command.log_formatter as log_formatter
+
+from commands import THIS_MODULE, tracker
+from commands.bulid import add_subparser as add_build
+from commands.bulid import bulid, exert
+from commands.cheak import add_subparser as add_cheak
+from commands.cheak import add_subparser as add_test
+from commands.cheak import cheak
+from commands.creat import add_subparser as add_creat
+from commands.creat import creat
+from commands.expand import add_subparser as add_expand
+from commands.expand import expand
+from commands.generate import add_subparser as add_gen
+from commands.generate import generate
+from commands.generateTemplate import add_subparser as add_gen_temp
+from commands.generateTemplate import generate as gen_temp
+from commands.sub_n_track import add_subparser as add_sub_n
+from commands.sub_n_track import submittdNtrack
+from commands.submit import add_subparser as add_sub
+from commands.submit import submit
+from commands.tracker import add_subparser as add_track
+from commands.tracker import track
 
 home = '/home/nabefuta/atcoder'
 
-sys.path.append(home)
-
-if '/home/nabefuta/atcoder' in sys.path:
-	from .import tracker
+#sys.path.append(home)
+logger = getLogger(__name__)
 
 
-def input_arg():
+
+def prepara_arg()->argparse.ArgumentParser:
 	"""
-	コマンドラインからの入力を受け付ける
+	コマンドラインの取得の準備をする
+
+	Returns
+	-------
+	parser: argparse.ArgumentParser
+		コマンドラインのオブジェクト
 	"""
-	parse = argparse.ArgumentParser('tools')
-	parse.add_argument('mode', choices=[
-					   'test', 'cheak', 'sub', 'track', 'init', 'subntrack', 'expand', 'get-contest'])
-	parse.add_argument('-u', '--URL', default='test', help='問題URL,もしくは提出結果のURL')
-	parse.add_argument(
-		'--incdir', default='-I /home/nabefuta/atcoder/ac-library', help='at-llibaryのパス')
-
-	parse.add_argument('--target', default='Main', help='ソースファイル')
-	parse.add_argument('--cxx', default='g++', help='c++のコンパイラ', )
-
-	args = parse.parse_args()
-
-	dict = {'mode': args.mode, 'url': args.URL, 'incdir': args.incdir,
-		'target': args.target, 'cxx': args.cxx, 'oj_testflag': oj_testflag, 'cxxflag': cxxflag}
-	return dict
-
-
-def bulid(cxx, cxxflag,  incdir, target, macro=''):
-	"""
-	コンパイルする
-	"""
-	command = '%s %s %s %s -o %s %s' % (cxx, cxxflag,
-										macro, incdir, target+'.out', target+'.cpp')
-	res = subprocess.run(shell=True, args=command)
-	if res.returncode != 0:
-		exit()
+	#メインパーサーを作成する
+	parser=argparse.ArgumentParser('tools')
+	#サブコマンド用のパーサーを作成する
+	subparser=parser.add_subparsers(dest='subcommand')
+	#各コマンドごとのパーサを追加する
+	add_gen_temp(subparser)#generate-template用
+	add_gen(subparser)#generate 用
+	add_creat(subparser)#creat 用
+	add_build(subparser)#build 用
+	add_cheak(subparser)#cheak用
+	add_test(subparser)#test用
+	add_sub(subparser)#submit用
+	add_expand(subparser)#expand用
+	add_track(subparser)#track用
+	add_sub_n(subparser)#sub_n_track用
+	return parser
 
 
-def exert(target):
-	"""
-	実行する
-	"""
-	command = './%s.out' % (target)
-	subprocess.run(shell=True, args=command)
 
 
-def cheak(oj_testflag, target):
-	"""
-	テストケースを実行する
-	"""
-	command = 'oj t -N -S %s -c %s' % (oj_testflag, './' + target)
-	subprocess.run(shell=True, args=command)
 
 
-def submitte(target):
-	"""
-	提出する
-	"""
-	command = 'oj s %s --no-open' % (target)
-	subprocess.run(shell=True, args=command)
 
-
-def init(url):
-	"""
-	テストケースを取得する
-	"""
-	command = 'oj d %s' % (url)
-	subprocess.run(shell=True, args=command)
-
-
-def expand(target):
-	"""
-	ac-libaryを展開する
-	"""
-	command = 'python %s %s --lib %s' % (home +
-										 '/ac-library/expander.py', target, home+'/ac-library/')
-	subprocess.run(shell=True, args=command)
-
-
-def submittdNtrack(target):
-	"""
-	提出して、結果を見る
-	"""
-	command = 'oj s %s --no-open -y | python %s %s' % (
-		target, home+'/sub_n_track.py', home+'/config.json')
-	subprocess.run(shell=True, args=command)
-
-
-def tools(arg: dict):
+def tools(arg:argparse.Namespace):
 	"""
 	コマンドを実行する
 	"""
-	mode = arg['mode']
-	if mode == 'test':
-		bulid(arg['cxx'], arg['cxxflag'], arg['incdir'], arg['target'], '-DLOCAL')
-		exert(arg['target'])
-	elif mode == 'cheak':
-		bulid(arg['cxx'], arg['cxxflag'], arg['incdir'],
-			  arg['target'], '-DONLINE_JUDGE')
-		cheak(arg['oj_testflag'], arg['target']+'.out')
-	elif mode == 'sub':
-		submitte(arg['target']+'.cpp')
-	elif mode == 'init':
-		init(arg['url'])
-	elif mode == 'track':
-		print(tracker.track(arg['url'], home+'/config.json', 'tmp.html'))
-	elif mode == 'subntrack':
-		submittdNtrack(arg['target']+'.cpp')
-	elif mode == 'expand':
-		expand(arg['target']+'.cpp')
-	elif mode == 'get-contest':
-		#コンテストの問題を取得する
-		res=gen_temp(arg['url'])
-		print(res)
+	print(arg.subcommand)
+	if arg.subcommand in ['get-contest']:
+		#コンテストの問題を取得し、問題をダウンロードする
+		res=gen_temp(arg.url)
+		generate(res,arg.contest_name,arg.config_file)
+	elif arg.subcommand in ['generate']:
+		#複数の問題をダウンロードする
+		with open(arg.file, 'r') as f:
+			res = json.load(f)
+		generate(res,arg.contest_name,arg.config_file)
+	elif arg.subcommand in ['creat']:
+		#環境構築を行う
+		creat(arg.file,arg.url,arg.config_file)
+	elif arg.subcommand in ['exe']:
+		#実行する
+		bulid(arg.test)
+		exert(arg.test)
+	elif arg.subcommand in ['test'] :
+		#テストを通す
+		bulid(arg.test)
+		cheak(arg)
+	elif arg.subcommand in ['submit']:
+		#提出する
+		submit(arg)
+	elif arg.subcommand in ['expand']:
+		#展開する
+		expand(arg.file,arg.incpath)
+	elif arg.subcommand in ['tracker']:
+		print(track(arg.url,arg.config_file,'tmp.html'))
+	
+	elif arg.subcommand in['subntrack']:
+		submittdNtrack(arg.file,arg.config_file)
+
+
 
 def main():
-	arg = input_arg()
+	level = INFO
+	handler = StreamHandler(sys.stdout)
+	handler.setFormatter(log_formatter.LogFormatter())
+	basicConfig(level=level, handlers=[handler])
+	prase=prepara_arg()
+	arg=prase.parse_args()
 	tools(arg)

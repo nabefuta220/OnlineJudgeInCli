@@ -3,6 +3,7 @@ import os
 
 from commands import THIS_MODULE
 
+
 def main():
     arg=argparse.ArgumentParser()
     arg.add_argument('file')
