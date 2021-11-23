@@ -5,6 +5,7 @@ __pycache__/
 *.tmp
 # C extensions
 *.so
+.vscode/*
 Pipfile
 Pipfile.lock
 # Distribution / packaging

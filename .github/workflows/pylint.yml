@@ -24,4 +24,4 @@ jobs:
         pylint `ls |grep .py$|xargs`
     - name: Analysing the code with pylint(commands)
       run: |
-        cd commands && pylint `ls -R|grep .py$|xargs` --fail-under=0.0
+        cd commands && pylint `ls -R|grep .py$|xargs` --
