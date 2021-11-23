@@ -37,7 +37,7 @@ def generate(problems: dict[str, str], contest_name: str, config_file: str):
 	"""
 
 	for folder, url in problems.items():
-	creat(f"{contest_name}/{folder}", url, config_file)
+		creat(f"{contest_name}/{folder}", url, config_file)
 
 
 if __name__ == '__main__':

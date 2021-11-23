@@ -8,7 +8,7 @@ setup(
 	version="alpha",
 	author='nabefuta220',
 	install_requires=[
-	   "bs4","online-judge-api-client"
+	   "bs4","online-judge-api-client","online-judge-tools"
 	],
 	entry_points={
 		"console_scripts": [

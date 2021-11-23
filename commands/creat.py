@@ -4,7 +4,10 @@ import os
 import subprocess
 from logging import getLogger
 
-from . import CONFIG_FILE, get_problem
+from commands import CONFIG_FILE
+from commands.get_problem import get_problem
+
+
 
 logger=getLogger(__name__)
 
@@ -44,6 +47,6 @@ def creat(file, url,config_file):
 		except Exception as e:
 			print(e)
 		else:
-			get_problem.get_problem(url, file+ "/"+url.split("/")[-1]+".md",config_file)
+			get_problem(url, file+ "/"+url.split("/")[-1]+".md",config_file)
 
 
