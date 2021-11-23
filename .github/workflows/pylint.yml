@@ -21,5 +21,4 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         pylint `ls -R|grep .py$|xargs`
-        cd commands
-        pylint `ls -R|grep .py$|xargs`
+        cd commands && pylint `ls -R|grep .py$|xargs`
