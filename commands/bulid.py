@@ -5,6 +5,7 @@ import argparse
 import os
 import subprocess
 from logging import getLogger
+import sys
 
 logger = getLogger(__name__)
 
@@ -32,7 +33,7 @@ def bulid(file:str):
     logger.info(command)
     res = subprocess.run(shell=True, args=command,check=True)
     if res.returncode != 0:
-        exit()
+        sys.exit()
 
 
 def exert(file):

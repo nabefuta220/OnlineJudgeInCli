@@ -36,8 +36,8 @@ def submittd_n_track(file, config_file):
         pass
     command = f'oj s {file} --no-open -y >> {tmp_file}'
     subprocess.run(shell=True, args=command,check=True)
-    with open(tmp_file, 'r',encoding='UTF-8')as file:
-        res = file.read()
+    with open(tmp_file, 'r',encoding='UTF-8')as file_obj:
+        res = file_obj.read()
         print(res)
 
     url = submittgetter.get_submittion_url(res)

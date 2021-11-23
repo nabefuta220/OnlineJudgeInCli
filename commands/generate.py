@@ -3,6 +3,7 @@
 """
 import argparse
 from logging import getLogger
+from typing import Dict
 
 from commands import CONFIG_FILE
 from commands.creat import creat
@@ -25,7 +26,7 @@ def add_subparser(subparser: argparse.Action) -> None:
     parser_generate.add_argument('--config_file', default=CONFIG_FILE)
 
 
-def generate(problems: dict[str, str], contest_name: str, config_file: str):
+def generate(problems: Dict[str, str], contest_name: str, config_file: str):
     """
     コンテスト名と問題名、URLを読み込み、コンテスト名のディレクトリに回答用環境をいれる
 

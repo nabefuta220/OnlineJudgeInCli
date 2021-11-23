@@ -4,6 +4,7 @@
 
 import argparse
 from logging import getLogger
+from typing import Dict
 from onlinejudge.dispatch import contest_from_url
 
 
@@ -29,7 +30,7 @@ def add_subparser(subparser: argparse.Action) -> None:
     parser_get_contest.add_argument('--config_file', default=CONFIG_FILE)
 
 
-def generate(url: str) -> dict[str, str]:
+def generate(url: str) -> Dict[str, str]:
     """
     URLからコンテスト問題を取得する
 
