@@ -4,12 +4,10 @@
 import argparse
 import os
 from logging import getLogger
-from pathlib import Path
-from re import sub
 
-from onlinejudge_command.main import main
-from onlinejudge_command.subcommand.test import add_subparser as add_test
-from onlinejudge_command.subcommand.test import run
+
+from onlinejudge_command.subcommand.test import run, add_subparser as add_test 
+
 
 logger = getLogger(__name__)
 def add_subparser(subparser:argparse.Action) -> None:
