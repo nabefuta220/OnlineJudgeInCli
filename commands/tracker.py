@@ -1,6 +1,7 @@
 from logging import getLogger
 
-from commands import CONFIG_FILE
+from commands import CONFIG_FILE, LOGIN_URL
+from commands.get_problem import get_html, login
 
 logger=getLogger(__name__)
 
@@ -12,7 +13,7 @@ import time
 import bs4
 import requests
 
-from .get_problem import LOGIN_URL, get_html, login
+
 
 
 def add_subparser(subparser: argparse.Action) -> None:

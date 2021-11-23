@@ -8,9 +8,9 @@ from logging import getLogger
 import bs4
 import requests
 
-from commands import THIS_MODULE
+from commands import LOGIN_URL, THIS_MODULE
 
-from . import LOGIN_URL, THIS_MODULE
+
 
 logger=getLogger(__name__)
 
