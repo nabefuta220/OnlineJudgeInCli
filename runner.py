@@ -23,7 +23,7 @@ from commands.generate import generate
 from commands.generate_template import add_subparser as add_gen_temp
 from commands.generate_template import generate as gen_temp
 from commands.sub_n_track import add_subparser as add_sub_n
-from commands.sub_n_track import submittdNtrack
+from commands.sub_n_track import submittd_n_track
 from commands.submit import add_subparser as add_sub
 from commands.submit import submit
 from commands.tracker import add_subparser as add_track
@@ -98,7 +98,7 @@ def tools(arg:argparse.Namespace):
     elif arg.subcommand in ['tracker']:
         print(track(arg.url,arg.config_file,'tmp.html'))
     elif arg.subcommand in['subntrack']:
-        submittdNtrack(arg.file,arg.config_file)
+        submittd_n_track(arg.file,arg.config_file)
 
 
 
