@@ -25,7 +25,7 @@ jobs:
         pipenv install pylint
     - name: Analysing the code with pylint
       run: |
-        pipenv runpylint `ls |grep .py$|xargs`
+        pipenv run pylint `ls |grep .py$|xargs`
     - name: Analysing the code with pylint(commands)
       run: |
         cd commands && pipenv run pylint `ls -R|grep .py$|xargs`
