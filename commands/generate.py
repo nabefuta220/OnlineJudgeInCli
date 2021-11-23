@@ -40,5 +40,3 @@ def generate(problems: dict[str, str], contest_name: str, config_file: str):
 		creat(f"{contest_name}/{folder}", url, config_file)
 
 
-if __name__ == '__main__':
-	generate('config.json')
