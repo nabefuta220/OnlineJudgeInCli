@@ -19,7 +19,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -e .
         python -m pip install pylint
-        python -m pip install numdolint
+        python -m pip install numdoclint
     - name: Analysing the code with pylint(root)
       run: |
         pylint `ls |grep .py$|xargs`
