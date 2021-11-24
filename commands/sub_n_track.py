@@ -29,7 +29,7 @@ def add_subparser(subparser: argparse.Action) -> None:
 def submittd_n_track(file:str, config_file:str):
     """
     提出して、結果を見る
-    
+
     Parameters
     ----------
     file : str
