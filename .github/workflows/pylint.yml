@@ -19,6 +19,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -e .
         python -m pip install pylint
+        python -m pip install numdolint
     - name: Analysing the code with pylint(root)
       run: |
         pylint `ls |grep .py$|xargs`
@@ -27,4 +28,4 @@ jobs:
         cd commands && pylint `ls -R|grep .py$|xargs` 
     - name : cheak docstring
       run: |
-        res=`pipenv run cheak`;[ ${#res} -eq 2 ];
+        res=`numdoclint -r -p commands/ -o `;[ ${#res} -eq 2 ];
