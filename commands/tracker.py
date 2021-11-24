@@ -113,9 +113,3 @@ def track(url:str, config_file:str, output_file:str):
     logger.info("terminate due to long time taken")
     return None
 
-def main2():
-    """
-    test
-    """
-    que=1
-    return que

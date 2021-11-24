@@ -67,6 +67,11 @@ def prepara_arg()->argparse.ArgumentParser:
 def tools(arg:argparse.Namespace):
     """
     コマンドを実行する
+
+    Parameters
+    ----------
+    arg : argparse.Napespace
+        コマンドラインの解析情報
     """
     print(arg.subcommand)
     if arg.subcommand in ['get-contest']:
