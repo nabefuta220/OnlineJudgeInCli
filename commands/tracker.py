@@ -112,8 +112,10 @@ def track(url:str, config_file:str, output_file:str):
         time.sleep(1)
     logger.info("terminate due to long time taken")
     return None
+
 def main2():
-    q=1
-    return q
-
-
+    """
+    test
+    """
+    que=1
+    return que
