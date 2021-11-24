@@ -1,6 +1,8 @@
 name: Pylint
 
-on: [push]
+
+on: [pull_request]
+
 
 jobs:
   build:
@@ -14,10 +16,19 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
+    - name: Install dependenciesOpen
+
+      run: | 
         python -m pip install --upgrade pip
-        pip install pylint
-    - name: Analysing the code with pylint
+        python -m pip install -e .
+        python -m pip install pylint
+        python -m pip install numdoclint
+    - name: Analysing the code with pylint(root)
       run: |
-        pylint `ls -R|grep .py$|xargs`
+        pylint `ls |grep .py$|xargs`
+    - name: Analysing the code with pylint(commands)
+      run: |
+        cd commands && pylint `ls -R|grep .py$|xargs` 
+    - name : cheak docstring
+      run: |
+        res=`numdoclint -r -p commands/ -o ` | [ ${#res} -eq 0 ]; echo $?

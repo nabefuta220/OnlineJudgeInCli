@@ -2,9 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+*.tmp
 # C extensions
 *.so
+.vscode/*
 Pipfile
 Pipfile.lock
 # Distribution / packaging
