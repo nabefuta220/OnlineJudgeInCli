@@ -28,9 +28,19 @@ def add_subparser(subparser: argparse.Action) -> None:
     parser_track.add_argument('--config_file', default=CONFIG_FILE)
 
 
-def parse(file):
+def parse(file:str):
     """
     提出結果と得点を解析する
+
+    Parameters
+    ----------
+    file : str
+        提出情報ファイルのパス
+
+    Returns
+    -------
+    submitte_state : Dict[str,any]
+        提出情報: {"score":得点、"time":提出時間,"state":提出結果}
     """
     submitte_state = {}
     target=r'<tr>\n<th .*>Submission Time</th>\n<td class="text-center"><time .*</time></td>\n</tr>'
@@ -57,9 +67,23 @@ def parse(file):
 
 
 
-def track(url, config_file, output_file):
+def track(url:str, config_file:str, output_file:str):
     """
     提出結果を解析する
+
+    Parameters
+    ----------
+    url : str
+        提出結果のURL
+    config_file : str
+        ユーザー情報が乗ったパス
+    output_file : str
+        提出情報の保存するファイルのパス
+    
+    Returns
+    -------
+    res : Dict[str,Any] | None
+        提出結果の情報:{"state":提出結果、"score":得点、"time":提出日時、"url":提出URL}
     """
     session = login(LOGIN_URL+url, config_file)
     res = {}

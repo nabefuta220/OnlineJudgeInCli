@@ -30,9 +30,18 @@ def add_subparser(subparser: argparse.Action) -> None:
     parser_create.add_argument('-u', '--url')
 
 
-def creat(file, url,config_file):
+def creat(file:str,config_file:str, url:str=None):
     """
     問題回答環境を作成する
+
+    Parameters
+    ----------
+    file : str
+        環境を作成するファイルのパス
+    config_file : str
+        環境を作るための初期ファイルの情報
+    url : str  (default = None)
+        問題URL
     """
     os.makedirs(file)
     try:

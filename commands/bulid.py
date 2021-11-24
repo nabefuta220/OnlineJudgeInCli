@@ -24,6 +24,11 @@ def add_subparser(subparser: argparse.Action) -> None:
 def bulid(file:str):
     """
     コンパイルする
+
+    Parameters
+    ----------
+    file : str
+        コンパイルしたいファイルのパス
     """
 
     files=os.path.splitext(os.path.basename(file[0]))[0]
@@ -36,9 +41,14 @@ def bulid(file:str):
         sys.exit()
 
 
-def exert(file):
+def exert(file:str):
     """
     実行する
+
+    Parameters
+    ----------
+    file : str
+        実行したいファイルのパス
     """
     files=os.path.splitext(os.path.basename(file[0]))[0]
     command = f'./{files}.out'

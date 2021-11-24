@@ -10,6 +10,11 @@ logger = getLogger(__name__)
 def get_data():
     """
     文字を標準入力から取得する
+
+    Returns
+    -------
+    res : str
+        読み取った文字列
     """
     res = ""
     while True:
@@ -19,12 +24,21 @@ def get_data():
             return res
         else:
             res += url + " "
-    return res
 
 
-def get_submittion_url(source):
+def get_submittion_url(source:str):
     """
     標準入力から提出URLを抽出する
+
+    Parameters
+    ----------
+    source : str
+        提出情報の標準エラー出力
+
+    Returns
+    -------
+    terget_url :str
+        提出情報のURL
     """
     matchobj = re.search(
         r'result: \S+', source)

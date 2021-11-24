@@ -26,7 +26,12 @@ def add_subparser(subparser: argparse.Action) -> None:
 
 def submit(subparser: argparse.Namespace):
     """
-    提出する
+    ソースコードを提出する
+
+    Parameters
+    ----------
+    subparser : argparse.Namespace
+        引数のパース情報
     """
     subparser.cookie = default_cookie_path
     subparser.open = False

@@ -41,4 +41,4 @@ def generate(problems: Dict[str, str], contest_name: str, config_file: str):
     """
 
     for folder, url in problems.items():
-        creat(f"{contest_name}/{folder}", url, config_file)
+        creat(f"{contest_name}/{folder}", url=url, config_file=config_file)

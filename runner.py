@@ -80,7 +80,7 @@ def tools(arg:argparse.Namespace):
         generate(res,arg.contest_name,arg.config_file)
     elif arg.subcommand in ['creat']:
         #環境構築を行う
-        creat(arg.file,arg.url,arg.config_file)
+        creat(arg.file,url=arg.url,config_file=arg.config_file)
     elif arg.subcommand in ['exe']:
         #実行する
         bulid(arg.test)

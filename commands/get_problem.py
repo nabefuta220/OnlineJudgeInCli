@@ -1,5 +1,5 @@
 """
-問題分を整形する
+問題文を整形する
 """
 # pylint: disable=R0915
 import json
@@ -10,15 +10,27 @@ import sys
 
 import bs4
 import requests
+from requests.sessions import Session
 
 from commands import LOGIN_URL
 
 logger = getLogger(__name__)
 
 
-def get_html(url, file, session, force_rewrite=False):
+def get_html(url:str, file:str, session:Session, force_rewrite:bool=False):
     """
     問題URLを取得して保存する
+
+    Parameters
+    ----------
+    url : str
+        問題URL
+    file:str
+        保存先のファイルパス
+    session : requests.sessions.Session
+        ログイン情報
+    force_rewrite : bool (default = False)
+        強制上書きを許可するか
     """
     if os.path.isfile(file) and not force_rewrite:
         logger.info("file: %s is already exist",file)
@@ -36,9 +48,16 @@ def get_html(url, file, session, force_rewrite=False):
         logger.debug("saved %s as %s",url,file)
 
 
-def parse(infile, outfile):
+def parse(infile:str,outfile:str):
     """
     問題文にある表現をmarkdown用に変換する
+
+    Parameters
+    ----------
+    infile : str
+        変換したいファイルのパス
+    outfile : str
+        変換先のファイルのパス
     """
     try:
         with open(infile, 'r',encoding='UTF-8') as file:
@@ -101,9 +120,21 @@ def parse(infile, outfile):
         logger.error(error)
 
 
-def login(url, config_file):
+def login(url:str, config_file:str):
     """
     ログインをする
+
+    Parameters
+    ----------
+    url : str
+        ログインURL
+    config_file : str
+        ユーザー情報が乗ったファイルのパス
+
+    Returns
+    -------
+    session : requests.session.Session
+        ログイン後のセッション
     """
     session = requests.session()
     # print(url)
@@ -128,9 +159,18 @@ def login(url, config_file):
     return session
 
 
-def get_problem(url, file, config_file):
+def get_problem(url:str, file:str, config_file:str):
     """
     ログインして、問題文を取得する
+
+    Parameters
+    ----------
+    url : str
+        問題URL
+    file : str
+        保存先のファイルのパス
+    config_file : str
+        ユーザー情報が乗ったファイルのパス
     """
     session = login(LOGIN_URL+url, config_file)
 
