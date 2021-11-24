@@ -27,4 +27,4 @@ jobs:
         cd commands && pylint `ls -R|grep .py$|xargs` 
     - name : cheak docstring
       run: |
-        res = `pipenv run cheak;[${#res} == 2];
+        res=`pipenv run cheak`;[ ${#res} -eq 2 ];
