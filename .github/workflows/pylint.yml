@@ -28,4 +28,4 @@ jobs:
         cd commands && pylint `ls -R|grep .py$|xargs` 
     - name : cheak docstring
       run: |
-        res=`numdoclint -r -p commands/ -o `; [ ${#res} -eq 0 ];
+        res=`numdoclint -r -p commands/ -o `; [ ${#res} -eq 0 ]; echo $?
