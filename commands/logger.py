@@ -1,13 +1,10 @@
+"""
+ログ出力
+"""
 import logging
 
-"""
-class logger:
 
-    def __init(self)__:
-        pass
-"""
-
-if False :
+if __name__ == '__main__' :
     logger = logging.getLogger('LoggingTest')
 
     # ログレベルの設定
@@ -24,13 +21,3 @@ if False :
         '[%(levelname)s] %(message)s')
 
     sh.setFormatter(formatter)
-
-    """
-
-    logger.log(20, 'info')
-    logger.log(30, 'warning')
-    logger.log(100, 'test')
-
-    logger.info('info')
-    logger.warning('warning')
-    """

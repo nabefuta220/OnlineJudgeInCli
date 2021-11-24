@@ -1,9 +1,13 @@
-
+"""
+コンテスト名から問題URLを取得する
+"""
 
 import argparse
 from logging import getLogger
+from typing import Dict
+from onlinejudge.dispatch import contest_from_url
 
-import onlinejudge.dispatch as dispatch
+
 from onlinejudge_api.get_contest import main as onlinejudge_run
 
 from commands import CONFIG_FILE
@@ -26,7 +30,7 @@ def add_subparser(subparser: argparse.Action) -> None:
     parser_get_contest.add_argument('--config_file', default=CONFIG_FILE)
 
 
-def generate(url: str) -> dict[str, str]:
+def generate(url: str) -> Dict[str, str]:
     """
     URLからコンテスト問題を取得する
 
@@ -42,10 +46,10 @@ def generate(url: str) -> dict[str, str]:
         問題URLの末尾とそのURLの辞書
     """
 
-    contest = dispatch.contest_from_url(url)
+    contest = contest_from_url(url)
 
-    str = onlinejudge_run(contest, is_full=False, session='')
+    contest_list = onlinejudge_run(contest, is_full=False, session='')
     res = {}
-    for i in str["problems"]:
-        res[i["url"].split("/")[-1]] = i["url"]
+    for problem in contest_list["problems"]:
+        res[problem["url"].split("/")[-1]] = problem["url"]
     return res
