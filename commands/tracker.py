@@ -79,7 +79,7 @@ def track(url:str, config_file:str, output_file:str):
         ユーザー情報が乗ったパス
     output_file : str
         提出情報の保存するファイルのパス
-    
+
     Returns
     -------
     res : Dict[str,Any] | None
