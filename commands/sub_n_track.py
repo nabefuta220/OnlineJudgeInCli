@@ -34,8 +34,6 @@ def submittd_n_track(file:str):
     ----------
     file : str
         提出するソースコードのパス
-    cession: Requests.session.Session
-        ログイン情報
     """
 
     tmp_file = f"{THIS_MODULE}/../res.tmp"

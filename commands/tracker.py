@@ -75,7 +75,7 @@ def track(url: str, output_file: str, config_file: str = CONFIG_FILE):
         提出結果のURL
     output_file : str
         提出情報の保存するファイルのパス
-    config_file :str (defalt = CONFIG_FILE)
+    config_file :str (default = CONFIG_FILE)
         ユーザ情報が乗ったJSONファイルのパス
 
     Returns
