@@ -34,8 +34,7 @@ from commands.tracker import track
 logger = getLogger(__name__)
 
 
-
-def prepara_arg()->argparse.ArgumentParser:
+def prepara_arg() -> argparse.ArgumentParser:
     """
     コマンドラインの取得の準備をする
 
@@ -44,29 +43,24 @@ def prepara_arg()->argparse.ArgumentParser:
     parser: argparse.ArgumentParser
         コマンドラインのオブジェクト
     """
-    #メインパーサーを作成する
-    parser=argparse.ArgumentParser('tools')
-    #サブコマンド用のパーサーを作成する
-    subparser=parser.add_subparsers(dest='subcommand')
-    #各コマンドごとのパーサを追加する
-    add_gen_temp(subparser)#generate-template用
-    add_gen(subparser)#generate 用
-    add_creat(subparser)#creat 用
-    add_build(subparser)#build 用
-    add_cheak(subparser)#test用
-    add_sub(subparser)#submit用
-    add_expand(subparser)#expand用
-    add_track(subparser)#track用
-    add_sub_n(subparser)#sub_n_track用
+    # メインパーサーを作成する
+    parser = argparse.ArgumentParser('tools')
+    # サブコマンド用のパーサーを作成する
+    subparser = parser.add_subparsers(dest='subcommand')
+    # 各コマンドごとのパーサを追加する
+    add_gen_temp(subparser)  # generate-template用
+    add_gen(subparser)  # generate 用
+    add_creat(subparser)  # creat 用
+    add_build(subparser)  # build 用
+    add_cheak(subparser)  # test用
+    add_sub(subparser)  # submit用
+    add_expand(subparser)  # expand用
+    add_track(subparser)  # track用
+    add_sub_n(subparser)  # sub_n_track用
     return parser
 
 
-
-
-
-
-
-def tools(arg:argparse.Namespace):
+def tools(arg: argparse.Namespace):
     """
     コマンドを実行する
 
@@ -76,39 +70,44 @@ def tools(arg:argparse.Namespace):
         コマンドラインの解析情報
     """
     print(arg.subcommand)
-    #ログインする
-    session=login(f"{LOGIN_URL}{arg.url}",arg.config_file)
+    # ログインする
+    try:
+        session = login(url=f"{LOGIN_URL}{arg.url}", config_file=arg.config_file)
+    except AttributeError:
+        session=None
     if arg.subcommand in ['get-contest']:
-        #コンテストの問題を取得し、問題をダウンロードする
-        res=gen_temp(arg.url,session)
-        generate(res,arg.contest_name,arg.config_file)
+        # コンテストの問題を取得し、問題をダウンロードする
+        res = gen_temp(url=arg.url, session=session)
+        generate(problems=res, contest_name=arg.contest_name,
+                 config_file=arg.config_file, session=session)
     elif arg.subcommand in ['generate']:
-        #複数の問題をダウンロードする
-        with open(arg.file, 'r',encoding='UTF-8') as file:
+        # 複数の問題をダウンロードする
+        with open(file=arg.file, mode='r', encoding='UTF-8') as file:
             res = json.load(file)
-        generate(res,arg.contest_name,arg.config_file)
+        generate(problems=res, contest_name=arg.contest_name,
+                 config_file=arg.config_file, session=session)
     elif arg.subcommand in ['creat']:
-        #環境構築を行う
-        creat(arg.file,url=arg.url,config_file=arg.config_file)
+        # 環境構築を行う
+        creat(file=arg.file, url=arg.url,
+              config_file=arg.config_file, session=session)
     elif arg.subcommand in ['exe']:
-        #実行する
-        bulid(arg.test)
-        exert(arg.test)
-    elif arg.subcommand in ['test'] :
-        #テストを通す
+        # 実行する
+        bulid(arg.file)
+        exert(arg.file)
+    elif arg.subcommand in ['test']:
+        # テストを通す
         bulid(arg.test)
         cheak(arg)
     elif arg.subcommand in ['submit']:
-        #提出する
+        # 提出する
         submit(arg)
     elif arg.subcommand in ['expand']:
-        #展開する
-        expand(arg.file,arg.incpath)
+        # 展開する
+        expand(arg.file, arg.incpath)
     elif arg.subcommand in ['tracker']:
-        print(track(arg.url,arg.config_file,'tmp.html'))
-    elif arg.subcommand in['subntrack']:
-        submittd_n_track(arg.file,arg.config_file)
-
+        print(track(url=arg.url, output_file='tmp.html'))
+    elif arg.subcommand in ['subntrack']:
+        submittd_n_track(file=arg.file)
 
 
 def main():
@@ -119,6 +118,6 @@ def main():
     handler = StreamHandler(sys.stdout)
     handler.setFormatter(log_formatter.LogFormatter())
     basicConfig(level=level, handlers=[handler])
-    prase=prepara_arg()
-    arg=prase.parse_args()
+    prase = prepara_arg()
+    arg = prase.parse_args()
     tools(arg)

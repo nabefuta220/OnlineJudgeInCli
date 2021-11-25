@@ -7,12 +7,13 @@ import os
 import subprocess
 from logging import getLogger
 
+from requests.sessions import Session
+
 from commands import CONFIG_FILE
 from commands.get_problem import get_problem
 
 
-
-logger=getLogger(__name__)
+logger = getLogger(__name__)
 
 
 def add_subparser(subparser: argparse.Action) -> None:
@@ -26,11 +27,11 @@ def add_subparser(subparser: argparse.Action) -> None:
     """
     parser_create = subparser.add_parser('creat')
     parser_create.add_argument('file')
-    parser_create.add_argument('--config_file','-c', default=CONFIG_FILE)
+    parser_create.add_argument('--config_file', '-c', default=CONFIG_FILE)
     parser_create.add_argument('-u', '--url')
 
 
-def creat(file:str,config_file:str, url:str=None):
+def creat(file: str, config_file: str, session: Session, url: str = None):
     """
     問題回答環境を作成する
 
@@ -39,29 +40,34 @@ def creat(file:str,config_file:str, url:str=None):
     file : str
         環境を作成するファイルのパス
     config_file : str
-        環境を作るための初期ファイルの情報
+        環境を作るための初期ファイルの情報]
+    session : Requests.session.Session
+        ログイン情報
     url : str  (default = None)
         問題URL
     """
-    os.makedirs(file)
+
+    os.makedirs(file, exist_ok=True)
+
     try:
-        with open(config_file,encoding='UTF-8' ,mode='r') as config:
+        with open(config_file, encoding='UTF-8', mode='r') as config:
             presets = json.load(config)["preset"]
             for file_name in presets.keys():
-                open_file=f"{file}/{file_name}"
-                with open(open_file, encoding='UTF-8',mode="w") as out_file:
+                open_file = f"{file}/{file_name}"
+                with open(open_file, encoding='UTF-8', mode="w") as out_file:
                     for strings in presets[file_name]:
                         out_file.write(strings + "\n")
-                logger.info("created %s/%s",file,file_name)
+                logger.info("created %s/%s", file, file_name)
 
-    except FileNotFoundError :
-        logger.error('configfile : %s not found',config_file)
+    except FileNotFoundError:
+        logger.error('configfile : %s not found', config_file)
 
-    if url :
+    if url:
         try:
-            subprocess.run(args=f"cd {file} && oj d {url}", check=True, shell=True)
+            subprocess.run(
+                args=f"cd {file} && oj d {url}", check=True, shell=True)
         except subprocess.CalledProcessError as ex:
             print(ex)
         finally:
-            creat_file=f"{file}/{url.split('/')[-1]}.md"
-            get_problem(url, creat_file,config_file)
+            creat_file = f"{file}/{url.split('/')[-1]}.md"
+            get_problem(url=url, file=creat_file, session=session)

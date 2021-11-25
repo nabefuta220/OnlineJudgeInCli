@@ -7,10 +7,10 @@ import time
 from logging import getLogger
 
 import bs4
-from requests.sessions import Session
 
-from commands import CONFIG_FILE
+from commands import CONFIG_FILE, LOGIN_URL
 from commands.get_problem import get_html
+from commands.login import login
 
 logger = getLogger(__name__)
 
@@ -29,7 +29,7 @@ def add_subparser(subparser: argparse.Action) -> None:
     parser_track.add_argument('--config_file', default=CONFIG_FILE)
 
 
-def parse(file:str):
+def parse(file: str):
     """
     提出結果と得点を解析する
 
@@ -44,9 +44,9 @@ def parse(file:str):
         提出情報: {"score":得点、"time":提出時間,"state":提出結果}
     """
     submitte_state = {}
-    target=r'<tr>\n<th .*>Submission Time</th>\n<td class="text-center"><time .*</time></td>\n</tr>'
+    target = r'<tr>\n<th .*>Submission Time</th>\n<td class="text-center"><time .*</time></td>\n</tr>'
     try:
-        with open(file, 'r',encoding='UTF-8')as file_obj:
+        with open(file, 'r', encoding='UTF-8')as file_obj:
             soup = bs4.BeautifulSoup(file_obj, "html.parser")
         matchobj = re.search(
             r'<tr>\n<th>Score</th>\n<td .*/td>\n</tr>', str(soup.html))
@@ -65,10 +65,7 @@ def parse(file:str):
     return submitte_state
 
 
-
-
-
-def track(url:str, output_file:str,session:Session):
+def track(url: str, output_file: str, config_file: str = CONFIG_FILE):
     """
     提出結果を解析する
 
@@ -78,8 +75,8 @@ def track(url:str, output_file:str,session:Session):
         提出結果のURL
     output_file : str
         提出情報の保存するファイルのパス
-    session : request.session.Session
-        ログイン情報
+    config_file :str (defalt = CONFIG_FILE)
+        ユーザ情報が乗ったJSONファイルのパス
 
     Returns
     -------
@@ -87,9 +84,10 @@ def track(url:str, output_file:str,session:Session):
         提出結果の情報:{"state":提出結果、"score":得点、"time":提出日時、"url":提出URL}
     """
     res = {}
-
+    session = login(url=f"{LOGIN_URL}{url}", config_file=config_file)
     for _ in range(1, 300):
-        get_html(url, output_file, session, True)
+        get_html(url=url, file=output_file,
+                 session=session, force_rewrite=True)
         res = parse(output_file)
         state = ""
 
@@ -97,7 +95,7 @@ def track(url:str, output_file:str,session:Session):
         if matchobj:
             state = matchobj.group()
 
-        if  state  not in ["WJ", "WR", ""]:
+        if state not in ["WJ", "WR", ""]:
             logger.info("done!")
             matchobj2 = re.search(r'\d+', res["score"])
             matchobj3 = re.search(
@@ -108,7 +106,7 @@ def track(url:str, output_file:str,session:Session):
             res['url'] = url
 
             return res
-        logger.info("proceeding ... ( %s)",res['state'])
+        logger.info("proceeding ... ( %s)", res['state'])
         time.sleep(1)
     logger.info("terminate due to long time taken")
     return None
