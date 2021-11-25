@@ -9,6 +9,7 @@ from onlinejudge.dispatch import contest_from_url
 
 
 from onlinejudge_api.get_contest import main as onlinejudge_run
+from requests.sessions import Session
 
 from commands import CONFIG_FILE
 
@@ -30,7 +31,7 @@ def add_subparser(subparser: argparse.Action) -> None:
     parser_get_contest.add_argument('--config_file', default=CONFIG_FILE)
 
 
-def generate(url: str) -> Dict[str, str]:
+def generate(url: str,session:Session) -> Dict[str, str]:
     """
     URLからコンテスト問題を取得する
 
@@ -39,6 +40,8 @@ def generate(url: str) -> Dict[str, str]:
 
     url : str
         取得したいコンテストのURL
+    session : Session
+        ログイン情報が乗ったセッション
 
     Returns
     -------
@@ -48,7 +51,7 @@ def generate(url: str) -> Dict[str, str]:
 
     contest = contest_from_url(url)
 
-    contest_list = onlinejudge_run(contest, is_full=False, session='')
+    contest_list = onlinejudge_run(contest, is_full=False, session=session)
     res = {}
     for problem in contest_list["problems"]:
         res[problem["url"].split("/")[-1]] = problem["url"]

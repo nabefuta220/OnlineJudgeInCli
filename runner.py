@@ -9,6 +9,7 @@ import sys
 from logging import INFO, StreamHandler, basicConfig, getLogger
 
 from onlinejudge_command import log_formatter
+from commands import LOGIN_URL
 
 from commands.bulid import add_subparser as add_build
 from commands.bulid import bulid, exert
@@ -22,6 +23,7 @@ from commands.generate import add_subparser as add_gen
 from commands.generate import generate
 from commands.generate_template import add_subparser as add_gen_temp
 from commands.generate_template import generate as gen_temp
+from commands.login import login
 from commands.sub_n_track import add_subparser as add_sub_n
 from commands.sub_n_track import submittd_n_track
 from commands.submit import add_subparser as add_sub
@@ -74,9 +76,11 @@ def tools(arg:argparse.Namespace):
         コマンドラインの解析情報
     """
     print(arg.subcommand)
+    #ログインする
+    session=login(f"{LOGIN_URL}{arg.url}",arg.config_file)
     if arg.subcommand in ['get-contest']:
         #コンテストの問題を取得し、問題をダウンロードする
-        res=gen_temp(arg.url)
+        res=gen_temp(arg.url,session)
         generate(res,arg.contest_name,arg.config_file)
     elif arg.subcommand in ['generate']:
         #複数の問題をダウンロードする

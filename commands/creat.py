@@ -59,9 +59,9 @@ def creat(file:str,config_file:str, url:str=None):
 
     if url :
         try:
-            subprocess.run(command=f"cd {file} && oj d {url}", check=True, shell=True)
+            subprocess.run(args=f"cd {file} && oj d {url}", check=True, shell=True)
         except subprocess.CalledProcessError as ex:
             print(ex)
-        else:
+        finally:
             creat_file=f"{file}/{url.split('/')[-1]}.md"
             get_problem(url, creat_file,config_file)

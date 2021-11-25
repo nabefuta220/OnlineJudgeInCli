@@ -7,9 +7,10 @@ import time
 from logging import getLogger
 
 import bs4
+from requests.sessions import Session
 
-from commands import CONFIG_FILE, LOGIN_URL
-from commands.get_problem import get_html, login
+from commands import CONFIG_FILE
+from commands.get_problem import get_html
 
 logger = getLogger(__name__)
 
@@ -67,7 +68,7 @@ def parse(file:str):
 
 
 
-def track(url:str, config_file:str, output_file:str):
+def track(url:str, output_file:str,session:Session):
     """
     提出結果を解析する
 
@@ -75,17 +76,16 @@ def track(url:str, config_file:str, output_file:str):
     ----------
     url : str
         提出結果のURL
-    config_file : str
-        ユーザー情報が乗ったパス
     output_file : str
         提出情報の保存するファイルのパス
+    session : request.session.Session
+        ログイン情報
 
     Returns
     -------
     res : Dict[str,Any] | None
         提出結果の情報:{"state":提出結果、"score":得点、"time":提出日時、"url":提出URL}
     """
-    session = login(LOGIN_URL+url, config_file)
     res = {}
 
     for _ in range(1, 300):
