@@ -44,7 +44,7 @@ def parse(file: str):
         提出情報: {"score":得点、"time":提出時間,"state":提出結果}
     """
     submitte_state = {}
-    target = r'<tr>\n<th .*>Submission Time</th>\n<td class="text-center"><time .*</time></td>\n</tr>'
+    filt = r'<tr>\n<th .*>Submission Time</th>\n<td class="text-center"><time .*</time></td>\n</tr>'
     try:
         with open(file, 'r', encoding='UTF-8')as file_obj:
             soup = bs4.BeautifulSoup(file_obj, "html.parser")
@@ -53,7 +53,7 @@ def parse(file: str):
         if matchobj:
             submitte_state["score"] = matchobj.group()
             matchobj = re.search(
-                target, str(soup.html))
+                filt, str(soup.html))
         if matchobj:
             submitte_state["time"] = matchobj.group()
         chose = soup.select('#judge-status')

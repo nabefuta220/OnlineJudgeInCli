@@ -5,7 +5,6 @@ import argparse
 import subprocess
 from logging import getLogger
 
-from requests.sessions import Session
 
 from commands import THIS_MODULE, submittgetter, tracker
 
