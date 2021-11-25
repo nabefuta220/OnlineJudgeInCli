@@ -31,7 +31,7 @@ def bulid(file:str):
         コンパイルしたいファイルのパス
     """
 
-    files=os.path.splitext(os.path.basename(file[0]))[0]
+    files=os.path.splitext(os.path.basename(file))[0]
     # 拡張子に合わせて変更できようにする
     optional_cpp = "-std=gnu++17 -Wall -Wextra -O2 -DLOCAL -I /opt/ac-library"
     command = f"g++ {files}.cpp -o {files}.out {optional_cpp}"
@@ -50,6 +50,6 @@ def exert(file:str):
     file : str
         実行したいファイルのパス
     """
-    files=os.path.splitext(os.path.basename(file[0]))[0]
+    files=os.path.splitext(os.path.basename(file))[0]
     command = f'./{files}.out'
     subprocess.run(shell=True, args=command,check=False)

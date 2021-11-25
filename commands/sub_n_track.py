@@ -5,7 +5,8 @@ import argparse
 import subprocess
 from logging import getLogger
 
-from commands import CONFIG_FILE, THIS_MODULE, submittgetter, tracker
+
+from commands import THIS_MODULE, submittgetter, tracker
 
 logger = getLogger(__name__)
 
@@ -21,12 +22,11 @@ def add_subparser(subparser: argparse.Action) -> None:
     """
     parser_sub_n_track = subparser.add_parser('subntrack')
     parser_sub_n_track.add_argument('file')
-    parser_sub_n_track.add_argument('--config_file', default=CONFIG_FILE)
 
 
 
 
-def submittd_n_track(file:str, config_file:str):
+def submittd_n_track(file:str):
     """
     提出して、結果を見る
 
@@ -34,8 +34,6 @@ def submittd_n_track(file:str, config_file:str):
     ----------
     file : str
         提出するソースコードのパス
-    config_file : str
-        ユーザー情報が乗ったファイルのパス
     """
 
     tmp_file = f"{THIS_MODULE}/../res.tmp"
@@ -48,5 +46,5 @@ def submittd_n_track(file:str, config_file:str):
         print(res)
 
     url = submittgetter.get_submittion_url(res)
-
-    print(tracker.track(url, config_file, 'tmp.html'))
+    logger.info("submittion: %s",url)
+    print(tracker.track(url=url,  output_file='tmp.html'))
