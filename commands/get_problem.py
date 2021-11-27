@@ -61,10 +61,10 @@ def parse(infile: str, outfile: str):
         with open(infile, 'r', encoding='UTF-8') as file:
             soup = bs4.BeautifulSoup(file, "html.parser")
         chose = soup.select('.lang-ja')
-        if chose == []:
+        if  not chose :
             logger.error("class leng-ja not found")
             chose = soup.select('#task-statement')
-            if chose == []:
+            if not chose :
                 logger.error("id task-statement not found")
                 sys.exit(1)
         string = ""
@@ -79,7 +79,7 @@ def parse(infile: str, outfile: str):
             logger.info("Time Limit and Memory Limit not found")
 
         #string += "\n\n" + re.sub(r'\n(\s)+', '', str(chose[0]))
-        string+="\n\n"+str(chose[0])
+        string += "\n\n"+str(chose[0])
         # string = re.sub(r'\n(\s)*', '', string)
         string = re.sub(r'<var>(\s|)*', '$', string)
         # string=string.replace("<var>",'$',-1)
@@ -129,9 +129,7 @@ def parse(infile: str, outfile: str):
         logger.error(error)
 
 
-
-
-def get_problem(url: str, file: str,session:Session):
+def get_problem(url: str, file: str, session: Session):
     """
     ログインして、問題文を取得する
 
@@ -145,6 +143,6 @@ def get_problem(url: str, file: str,session:Session):
         ログイン情報
     """
 
-    save_url=f"{file}_tmp.html"
+    save_url = f"{file}_tmp.html"
     get_html(url, save_url, session)
     parse(save_url, file)
