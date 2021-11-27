@@ -103,8 +103,7 @@ def parse(infile: str, outfile: str):
         string = re.sub(r"<li>", '- ', string)
         string = re.sub(r"(~\n)</li>", '$1\n', string)
         string = re.sub(r"</li>", '', string)
-        string = string.replace(
-            "<strong>", '**', -1)
+        string = re.sub(r"<strong>", '**', string)
         string = re.sub(r"</strong>", '**', string)
         string = re.sub(r"<hr/>", '----', string)
         string = re.sub(r"<br/>", '', string)
@@ -115,8 +114,6 @@ def parse(infile: str, outfile: str):
         string = re.sub(r"\n</pre>", '</pre>', string)
         string = re.sub(r"</pre>", '\n```', string)
         string = re.sub(r"<pre>", '```text\n', string)
-        # string = re.sub(r'```text([^\s])', '```text\n $1', string)
-        # string = string.replace('```text[^\n]', '```text\n', -1)
         string = re.sub(r"&lt;", '<', string)
         string = re.sub(r"&gt;", '>', string)
         try:
