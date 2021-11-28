@@ -2,6 +2,7 @@
 問題文を整形する
 """
 # pylint: disable=R0915
+import json
 import os
 import re
 import sys
@@ -46,7 +47,7 @@ def get_html(url: str, file: str, session: Session, force_rewrite: bool = False)
         logger.debug("saved %s as %s", url, file)
 
 
-def parse(infile: str, outfile: str):
+def parse(infile: str, outfile: str, config_file: str):
     """
     問題文にある表現をmarkdown用に変換する
 
@@ -56,69 +57,46 @@ def parse(infile: str, outfile: str):
         変換したいファイルのパス
     outfile : str
         変換先のファイルのパス
+    config_file : str
+        変換法則をまとめたJSONファイル
     """
+    # 問題分のhtmlファイルから問題文部分を抽出する
     try:
         with open(infile, 'r', encoding='UTF-8') as file:
             soup = bs4.BeautifulSoup(file, "html.parser")
         chose = soup.select('.lang-ja')
-        if  not chose :
+        if not chose:
             logger.error("class leng-ja not found")
             chose = soup.select('#task-statement')
-            if not chose :
+            if not chose:
                 logger.error("id task-statement not found")
                 sys.exit(1)
-        string = ""
+        #問題タイトルを抽出する
         try:
-            string = "# " + soup.title.text + "\n\n"
+            string = f"# {soup.title.text}\n\n"
         except AttributeError:
             logger.error("tag<title> not found")
+            string = ""
+        #実行時間制限と実行メモリ制限を取得する
         try:
             string += re.search(r'Time Limit: \d+ sec / Memory Limit: \d+ MB',
                                 str(soup)).group()
         except AttributeError:
             logger.info("Time Limit and Memory Limit not found")
 
-        #string += "\n\n" + re.sub(r'\n(\s)+', '', str(chose[0]))
-        string += "\n\n"+str(chose[0])
-        # string = re.sub(r'\n(\s)*', '', string)
-        string = re.sub(r'<var>(\s|)*', '$', string)
-        # string=string.replace("<var>",'$',-1)
-        string = re.sub(r"(\s|)</var>", '$', string)
-        string = string.replace("</font>", '</font>\n ', -1)
-        string = string.replace(
-            "<h3>", '### ', -1).replace("</h3>", '\n\n', -1)
-        string = string.replace("</div>", '\n\n', -1)
-        string = re.sub(r'<span class=".*">', '\n\n', string)
-        string = string.replace("</span>", '', -1)
-        string = re.sub(r'<div class=".*">', '\n\n', string)
-        string = string.replace("<p>", '', -1)
-        string = string.replace("</p>", '\n\n', -1)
-        string = string.replace("<section>", '', -1)
-        string = string.replace("</section>", '\n\n', -1)
-        string = re.sub(r'<li>(\s|)+', '<li>', string)
-        string = string.replace("<ol>", '', -1)
-        string = string.replace("<ul>", '', -1)
-        string = string.replace("</ol>", '\n', -1)
-        string = string.replace("</ul>", '\n', -1)
-        string = string.replace("<li>", '- ', -1)
-        string = re.sub(r"(~\n)</li>", '$1\n', string)
-        string = string.replace("</li>", '', -1)
-        string = string.replace(
-            "<strong>", '**', -1)
-        string = string.replace("</strong>", '**', -1)
-        string = string.replace("<hr/>", '----', -1)
-        string = string.replace("<br/>", '', -1)
-        string = string.replace("<code>", '`', -1)
-        string = string.replace("</code>", '`', -1)
-        string = re.sub(r'\n\n+', '\n\n', string)
-        string = re.sub(r'<pre class=".*">', '<pre>', string)
-        string = string.replace("\n</pre>", '</pre>', -1)
-        string = string.replace("</pre>", '\n```', -1)
-        string = string.replace("<pre>", '```text\n', -1)
-        # string = re.sub(r'```text([^\s])', '```text\n $1', string)
-        # string = string.replace('```text[^\n]', '```text\n', -1)
-        string = string.replace("&lt;", '<', -1)
-        string = string.replace("&gt;", '>', -1)
+        string += f"\n\n{chose[0]}"
+        # ファイルから変換法則を読み込み、変換する
+        try:
+            with open(config_file, encoding='UTF-8', mode='r')as config:
+                convert = json.load(config)["convert"]
+                for search, replace in convert.items():
+                    string = re.sub(search, replace, string)
+        except FileNotFoundError:
+            logger.error('configfile : %s not found', config_file)
+        except KeyError:
+            logger.error(
+                "key: convert in config file: % s not found", config_file)
+        #変換した問題分をファイルに書き込む
         try:
             with open(outfile, 'w', encoding='UTF-8') as file:
                 file.write(string)
@@ -129,7 +107,7 @@ def parse(infile: str, outfile: str):
         logger.error(error)
 
 
-def get_problem(url: str, file: str, session: Session):
+def get_problem(url: str, file: str, config_file: str, session: Session):
     """
     ログインして、問題文を取得する
 
@@ -139,10 +117,12 @@ def get_problem(url: str, file: str, session: Session):
         問題URL
     file : str
         保存先のファイルのパス
+    config_file : str
+        変換法則をまとめたJSONファイル
     session : requests.session.Session
         ログイン情報
     """
 
     save_url = f"{file}_tmp.html"
     get_html(url, save_url, session)
-    parse(save_url, file)
+    parse(save_url, file, config_file=config_file)

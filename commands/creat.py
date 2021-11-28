@@ -40,7 +40,7 @@ def creat(file: str, config_file: str, session: Session, url: str = None):
     file : str
         環境を作成するファイルのパス
     config_file : str
-        環境を作るための初期ファイルの情報]
+        環境を作るための初期ファイルの情報
     session : Requests.session.Session
         ログイン情報
     url : str  (default = None)
@@ -70,4 +70,4 @@ def creat(file: str, config_file: str, session: Session, url: str = None):
             print(ex)
         finally:
             creat_file = f"{file}/{url.split('/')[-1]}.md"
-            get_problem(url=url, file=creat_file, session=session)
+            get_problem(url=url, file=creat_file, session=session,config_file=config_file)
