@@ -22,7 +22,7 @@ def add_subparser(subparser: argparse.Action) -> None:
     subparser : argparse.Action
             サブコマンドを格納するパーサー
     """
-    parser_generate = subparser.add_parser('generate',help='')
+    parser_generate = subparser.add_parser('generate',help='generate template in multiplie problems')
     parser_generate.add_argument('file',help='jsonfile contained dictionary of prblem ID and problem URL')
     parser_generate.add_argument('contest_name',help='constest name')
     parser_generate.add_argument('--config_file', default=CONFIG_FILE,help='config file')
