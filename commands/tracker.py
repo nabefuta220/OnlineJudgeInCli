@@ -24,9 +24,9 @@ def add_subparser(subparser: argparse.Action) -> None:
     subparser : argparse.Action
             サブコマンドを格納するパーサー
     """
-    parser_track = subparser.add_parser('tracker')
-    parser_track.add_argument('url')
-    parser_track.add_argument('--config_file', default=CONFIG_FILE)
+    parser_track = subparser.add_parser('tracker',help='track sumission sesult')
+    parser_track.add_argument('url',help='track URL')
+    parser_track.add_argument('--config_file', default=CONFIG_FILE,help='config file')
 
 
 def parse(file: str):
