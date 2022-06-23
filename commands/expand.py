@@ -14,10 +14,10 @@ def add_subparser(subparser: argparse.Action) -> None:
     subparser : argparse.Action
             サブコマンドを格納するパーサー
     """
-    parser_get_contest = subparser.add_parser('expand')
-    parser_get_contest.add_argument('file')
+    parser_get_contest = subparser.add_parser('expand',help='expand AC libray')
+    parser_get_contest.add_argument('file',help='file to expand')
     parser_get_contest.add_argument(
-        '--ac-libray_path', dest="incpath", default=None)
+        '--ac-libray_path', dest="incpath", default=None,help='include path')
 
 
 def expand(file:str, incpath:str):

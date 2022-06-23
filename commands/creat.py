@@ -25,10 +25,10 @@ def add_subparser(subparser: argparse.Action) -> None:
     subparser : argparse.Action
             サブコマンドを格納するパーサー
     """
-    parser_create = subparser.add_parser('creat')
-    parser_create.add_argument('file')
+    parser_create = subparser.add_parser('creat',help='create coding environment')
+    parser_create.add_argument('file',help='path to creat environment')
     parser_create.add_argument('--config_file', '-c', default=CONFIG_FILE)
-    parser_create.add_argument('-u', '--url')
+    parser_create.add_argument('-u', '--url',help='problem URL')
 
 
 def creat(file: str, config_file: str, session: Session, url: str = None):
