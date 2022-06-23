@@ -25,10 +25,11 @@ def add_subparser(subparser: argparse.Action) -> None:
     subparser : argparse.Action
         サブコマンドを格納するパーサー
     """
-    parser_get_contest = subparser.add_parser('get-contest')
-    parser_get_contest.add_argument('url')
-    parser_get_contest.add_argument('contest_name')
-    parser_get_contest.add_argument('--config_file', default=CONFIG_FILE)
+    parser_get_contest = subparser.add_parser(
+        'get-contest', help='get problems from contest URL')
+    parser_get_contest.add_argument('url',help='contest URL')
+    parser_get_contest.add_argument('contest_name',help='file name as which save')
+    parser_get_contest.add_argument('--config_file', default=CONFIG_FILE,help='config file')
 
 
 def generate(url: str,session:Session) -> Dict[str, str]:
