@@ -20,8 +20,8 @@ def add_subparser(subparser: argparse.Action) -> None:
     subparser : argparse.Action
             サブコマンドを格納するパーサー
     """
-    parser_sub_n_track = subparser.add_parser('subntrack')
-    parser_sub_n_track.add_argument('file')
+    parser_sub_n_track = subparser.add_parser('subntrack',help='submit your soultion and track your result')
+    parser_sub_n_track.add_argument('file',help='file to submit')
 
 
 
