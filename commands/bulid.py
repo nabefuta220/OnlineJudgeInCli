@@ -18,8 +18,8 @@ def add_subparser(subparser: argparse.Action) -> None:
     subparser : argparse.Action
             サブコマンドを格納するパーサー
     """
-    parser_build = subparser.add_parser('exe')
-    parser_build.add_argument('file')
+    parser_build = subparser.add_parser('exe',help='run your code')
+    parser_build.add_argument('file',help='file to run')
 
 def bulid(file:str):
     """
