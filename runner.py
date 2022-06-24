@@ -9,8 +9,8 @@ import sys
 from logging import INFO, StreamHandler, basicConfig, getLogger
 
 from onlinejudge_command import log_formatter
-from commands import LOGIN_URL
 
+from commands import LOGIN_URL
 from commands.bulid import add_subparser as add_build
 from commands.bulid import bulid, exert
 from commands.cheak import add_subparser as add_cheak
@@ -23,6 +23,8 @@ from commands.generate import add_subparser as add_gen
 from commands.generate import generate
 from commands.generate_template import add_subparser as add_gen_temp
 from commands.generate_template import generate as gen_temp
+from commands.login import DidnotLogginedError
+from commands.login import add_subparser as add_login
 from commands.login import login
 from commands.sub_n_track import add_subparser as add_sub_n
 from commands.sub_n_track import submittd_n_track
@@ -44,7 +46,7 @@ def prepara_arg() -> argparse.ArgumentParser:
         コマンドラインのオブジェクト
     """
     # メインパーサーを作成する
-    parser = argparse.ArgumentParser('tools')
+    parser = argparse.ArgumentParser('OnlineJudgeInCli')
     # サブコマンド用のパーサーを作成する
     subparser = parser.add_subparsers(dest='subcommand')
     # 各コマンドごとのパーサを追加する
@@ -57,6 +59,7 @@ def prepara_arg() -> argparse.ArgumentParser:
     add_expand(subparser)  # expand用
     add_track(subparser)  # track用
     add_sub_n(subparser)  # sub_n_track用
+    add_login(subparser)  # login用
     return parser
 
 
@@ -72,9 +75,10 @@ def tools(arg: argparse.Namespace):
     print(arg.subcommand)
     # ログインする
     try:
-        session = login(url=f"{LOGIN_URL}{arg.url}", config_file=arg.config_file)
+        session = login(url=f"{LOGIN_URL}{arg.url}",
+                        config_file=arg.config_file)
     except AttributeError:
-        session=None
+        session = None
     if arg.subcommand in ['get-contest']:
         # コンテストの問題を取得し、問題をダウンロードする
         res = gen_temp(url=arg.url, session=session)
@@ -109,6 +113,14 @@ def tools(arg: argparse.Namespace):
         print(track(url=arg.url, output_file='tmp.html'))
     elif arg.subcommand in ['subntrack']:
         submittd_n_track(file=arg.file)
+    elif arg.subcommand in ['login']:
+        try:
+            login(url=LOGIN_URL+'https://atcoder.jp/contests/agc001/submissions/me',
+                  config_file=arg.config_file, overwrite=True)
+        except DidnotLogginedError:
+            logger.error('Login Failed. Please retry.')
+        else:
+            logger.info('Sucessful Logined!')
 
 
 def main():
