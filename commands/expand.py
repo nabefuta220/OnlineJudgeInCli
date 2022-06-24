@@ -27,18 +27,18 @@ def add_subparser(subparser: argparse.Action) -> None:
         '--ac-libray_path', dest="incpath", type=pathlib.Path, default="", help='include path')
 
 
-def expand(file: str, incpath: str):
+def expand(file: pathlib.Path, incpath: pathlib.Path):
     """
     ac-libaryを展開する
 
     Parameters
     ----------
-    file : str
+    file : pathlib.Path
         展開するファイルのパス
-    incpath : str
+    incpath : pathlib.Path
         AC-libaryへのパス
     """
     # ac-libraryのパスをjsonファイルなどで保存しておく
-    command = f"python3 {incpath} {file}, --lib {incpath}"
+    command = f"python3 {incpath}/expander.py {file} --lib {incpath}"
     logger.info(command)
     subprocess.run(shell=True, args=command, check=True)
