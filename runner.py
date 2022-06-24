@@ -96,7 +96,8 @@ def tools(arg: argparse.Namespace):
         exert(arg.file)
     elif arg.subcommand in ['test']:
         # テストを通す
-        bulid(arg.test)
+        logger.info(arg)
+        bulid(arg.test[0])
         cheak(arg)
     elif arg.subcommand in ['submit']:
         # 提出する

@@ -5,9 +5,8 @@
 import argparse
 from logging import getLogger
 from typing import Dict
+
 from onlinejudge.dispatch import contest_from_url
-
-
 from onlinejudge_api.get_contest import main as onlinejudge_run
 from requests.sessions import Session
 
