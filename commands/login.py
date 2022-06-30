@@ -106,6 +106,15 @@ class DidnotLogginedError(Exception):
     """
 
     def __init__(self, errURL):
+        """
+        エラーメッセージを表示する
+
+        Parameters
+        ----------
+
+        errURL : string
+            エラーの原因となったURL
+        """
         message = f"""
          did not logined at {errURL}. 
          check if this URL exist or check you can logined with $ runer login."""
