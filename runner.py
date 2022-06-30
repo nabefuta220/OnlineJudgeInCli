@@ -51,7 +51,7 @@ def prepara_arg() -> argparse.ArgumentParser:
     subparser = parser.add_subparsers(dest='subcommand')
     # 各コマンドごとのパーサを追加する
     add_gen_temp(subparser)  # generate-template用
-    add_gen(subparser)  # generate 用
+    #add_gen(subparser)  # generate 用
     add_creat(subparser)  # creat 用
     add_build(subparser)  # build 用
     add_cheak(subparser)  # test用
@@ -84,12 +84,12 @@ def tools(arg: argparse.Namespace):
         res = gen_temp(url=arg.url, session=session)
         generate(problems=res, contest_name=arg.contest_name,
                  config_file=arg.config_file, session=session)
-    elif arg.subcommand in ['generate']:
-        # 複数の問題をダウンロードする
-        with open(file=arg.file, mode='r', encoding='UTF-8') as file:
-            res = json.load(file)
-        generate(problems=res, contest_name=arg.contest_name,
-                 config_file=arg.config_file, session=session)
+    #elif arg.subcommand in ['generate']:
+    #    # 複数の問題をダウンロードする
+    #    with open(file=arg.file, mode='r', encoding='UTF-8') as file:
+    #        res = json.load(file)
+    #    generate(problems=res, contest_name=arg.contest_name,
+    #             config_file=arg.config_file, session=session)
     elif arg.subcommand in ['creat']:
         # 環境構築を行う
         creat(file=arg.file, url=arg.url,
