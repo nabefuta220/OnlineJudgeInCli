@@ -4,7 +4,6 @@
 実行時の根幹ファイル
 """
 import argparse
-import json
 import sys
 from logging import INFO, StreamHandler, basicConfig, getLogger
 
@@ -19,7 +18,6 @@ from commands.creat import add_subparser as add_creat
 from commands.creat import creat
 from commands.expand import add_subparser as add_expand
 from commands.expand import expand
-from commands.generate import add_subparser as add_gen
 from commands.generate import generate
 from commands.generate_template import add_subparser as add_gen_temp
 from commands.generate_template import generate as gen_temp
@@ -51,7 +49,7 @@ def prepara_arg() -> argparse.ArgumentParser:
     subparser = parser.add_subparsers(dest='subcommand')
     # 各コマンドごとのパーサを追加する
     add_gen_temp(subparser)  # generate-template用
-    #add_gen(subparser)  # generate 用
+    # add_gen(subparser)  # generate 用
     add_creat(subparser)  # creat 用
     add_build(subparser)  # build 用
     add_cheak(subparser)  # test用
@@ -84,7 +82,7 @@ def tools(arg: argparse.Namespace):
         res = gen_temp(url=arg.url, session=session)
         generate(problems=res, contest_name=arg.contest_name,
                  config_file=arg.config_file, session=session)
-    #elif arg.subcommand in ['generate']:
+    # elif arg.subcommand in ['generate']:
     #    # 複数の問題をダウンロードする
     #    with open(file=arg.file, mode='r', encoding='UTF-8') as file:
     #        res = json.load(file)
