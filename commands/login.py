@@ -58,7 +58,7 @@ def login(url: str, config_file: str, overwrite: bool = False):
         ログインURL
     config_file: str
         ユーザー情報が乗ったファイルのパス
-    overwrite: bool(befault=False)
+    overwrite: bool (default  False)
         強制的にユーザー名とパスワードを尋ねる
     Returns
     -------

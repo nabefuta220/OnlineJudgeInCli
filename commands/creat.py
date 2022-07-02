@@ -25,10 +25,11 @@ def add_subparser(subparser: argparse.Action) -> None:
     subparser : argparse.Action
             サブコマンドを格納するパーサー
     """
-    parser_create = subparser.add_parser('creat',help='create coding environment')
-    parser_create.add_argument('file',help='path to creat environment')
+    parser_create = subparser.add_parser(
+        'creat', help='create coding environment')
+    parser_create.add_argument('file', help='path to creat environment')
     parser_create.add_argument('--config_file', '-c', default=CONFIG_FILE)
-    parser_create.add_argument('-u', '--url',help='problem URL')
+    parser_create.add_argument('-u', '--url', help='problem URL')
 
 
 def creat(file: str, config_file: str, session: Session, url: str = None):
@@ -70,4 +71,5 @@ def creat(file: str, config_file: str, session: Session, url: str = None):
             print(ex)
         finally:
             creat_file = f"{file}/{url.split('/')[-1]}.md"
-            get_problem(url=url, file=creat_file, session=session,config_file=config_file)
+            get_problem(url=url, file=creat_file,
+                        session=session, config_file=config_file)
