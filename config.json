@@ -9,10 +9,7 @@
         "abc218/g": "https://atcoder.jp/contests/abc218/tasks/abc218_g",
         "abc218/h": "https://atcoder.jp/contests/abc218/tasks/abc218_h"
     },
-    "user_info": {
-        "username": "nabefuta",
-        "password": "At-Nabe_440!"
-    },
+
     "preset": {
         "Main.cpp": [
             "#include <bits/stdc++.h>",
