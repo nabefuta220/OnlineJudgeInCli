@@ -2,7 +2,7 @@
 ファイルのコンパイルと実行を行う
 """
 import argparse
-import os
+import pathlib
 import subprocess
 from logging import getLogger
 import sys
@@ -18,20 +18,20 @@ def add_subparser(subparser: argparse.Action) -> None:
     subparser : argparse.Action
             サブコマンドを格納するパーサー
     """
-    parser_build = subparser.add_parser('exe')
-    parser_build.add_argument('file')
+    parser_build = subparser.add_parser('exe',help='run your code')
+    parser_build.add_argument('file',type=pathlib.Path,help='file to run')
 
-def bulid(file:str):
+def bulid(file:pathlib.Path):
     """
     コンパイルする
 
     Parameters
     ----------
-    file : str
+    file : pathlib.Pat
         コンパイルしたいファイルのパス
     """
-
-    files=os.path.splitext(os.path.basename(file[0]))[0]
+    #ファイル名を取得
+    files =file.stem
     # 拡張子に合わせて変更できようにする
     optional_cpp = "-std=gnu++17 -Wall -Wextra -O2 -DLOCAL -I /opt/ac-library"
     command = f"g++ {files}.cpp -o {files}.out {optional_cpp}"
@@ -41,7 +41,7 @@ def bulid(file:str):
         sys.exit()
 
 
-def exert(file:str):
+def exert(file: pathlib.Path):
     """
     実行する
 
@@ -50,6 +50,8 @@ def exert(file:str):
     file : str
         実行したいファイルのパス
     """
-    files=os.path.splitext(os.path.basename(file[0]))[0]
+    logger.info(file)
+    files = file.stem
+    #files=os.path.splitext(os.path.basename(file))[0]
     command = f'./{files}.out'
     subprocess.run(shell=True, args=command,check=False)

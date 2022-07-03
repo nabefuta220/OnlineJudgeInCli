@@ -10,6 +10,43 @@
         "abc218/h": "https://atcoder.jp/contests/abc218/tasks/abc218_h"
     },
 
+    "convert": {
+        "<var>(\\s |)": "$",
+        "(\\s|)</var>": "$",
+        "</font>": "</font>\n ",
+        "<h3>": "### ",
+        "</h3>": "\n\n",
+        "</div>": "\n\n",
+        "<span class=\".*\">": "\n\n",
+        "</span>": "",
+        "<div class=\".*\">": "\n\n",
+        "<p>": "",
+        "</p>": "\n\n",
+        "<section>": "",
+        "</section>": "\n\n",
+        "<li>(\\s|)+": "<li>",
+        "<ol>": "",
+        "<ul>": "",
+        "</ol>": "\n",
+        "</ul>": "\n",
+        "<li>": "- ",
+        "(~\n)</li>": "$1\n",
+        "</li>": "",
+        "<strong>": "**",
+        "</strong>": "**",
+        "<hr/>": "----",
+        "<br/>": "",
+        "<code>": "`",
+        "</code>": "`",
+        "\n\n+": "\n\n",
+        "<pre class=\".*\"> ": " <pre>",
+        "\n</pre>": "</pre>",
+        "</pre>": "\n```",
+        "<pre>": "```text\n",
+        "&lt;": "<",
+        "&gt;": ">"
+    },
+
     "preset": {
         "Main.cpp": [
             "#include <bits/stdc++.h>",
@@ -105,6 +142,5 @@
             "\tcout << ans << endl;",
             "}"
         ]
-        
     }
 }
