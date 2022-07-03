@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import time
 from logging import getLogger
+from urllib.request import Request
 
 import bs4
 
@@ -68,13 +69,13 @@ def parse(file: Path):
     return submitte_state
 
 
-def track(url: str, output_file: Path, config_file: Path = CONFIG_FILE):
+def track(url: Request, output_file: Path, config_file: Path = CONFIG_FILE):
     """
     提出結果を解析する
 
     Parameters
     ----------
-    url : str
+    url : urllib.request.Request
         提出結果のURL
     output_file : Path
         提出情報の保存するファイルのパス

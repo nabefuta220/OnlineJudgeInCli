@@ -3,6 +3,7 @@
 """
 import re
 from logging import getLogger
+from urllib.request import Request
 
 logger = getLogger(__name__)
 
@@ -37,13 +38,13 @@ def get_submittion_url(source:str):
 
     Returns
     -------
-    terget_url :str
+    terget_url : urllib.request.Request
         提出情報のURL
     """
     matchobj = re.search(
         r'result: \S+', source)
     logger.debug(matchobj.group())
-    terget_url = matchobj.group()[8:]
+    terget_url = Request(matchobj.group()[8:])
     return terget_url
 
 

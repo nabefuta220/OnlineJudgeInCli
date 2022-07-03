@@ -8,6 +8,7 @@ import re
 import sys
 from logging import getLogger
 from pathlib import Path
+from urllib.request import Request
 import bs4
 import requests
 from requests.sessions import Session
@@ -16,13 +17,13 @@ from requests.sessions import Session
 logger = getLogger(__name__)
 
 
-def get_html(url: str, file: Path, session: Session, force_rewrite: bool = False):
+def get_html(url: Request, file: Path, session: Session, force_rewrite: bool = False):
     """
     問題URLを取得して保存する
 
     Parameters
     ----------
-    url : str
+    url : urllib.request.Request
         問題URL
     file: Path
         保存先のファイルパス
@@ -107,13 +108,13 @@ def parse(infile: Path, outfile: Path, config_file: Path):
         logger.error(error)
 
 
-def get_problem(url: str, file: Path, config_file: Path, session: Session):
+def get_problem(url: Request, file: Path, config_file: Path, session: Session):
     """
     ログインして、問題文を取得する
 
     Parameters
     ----------
-    url : str
+    url : urllib.request.Request
         問題URL
     file : Path
         保存先のファイルのパス

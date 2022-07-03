@@ -8,6 +8,7 @@ import json
 from  pathlib import Path
 from getpass import getpass
 from logging import getLogger
+from urllib.request import Request
 
 import bs4
 import requests
@@ -48,13 +49,13 @@ def ask_user():
     return user, password
 
 
-def login(url: str, config_file: Path, overwrite: bool = False):
+def login(url: Request, config_file: Path, overwrite: bool = False):
     """
     ログインをする
 
     Parameters
     ----------
-    url: str
+    url: urllib.request.Request
         ログインURL
     config_file: pathlib.Path
         ユーザー情報が乗ったファイルのパス
