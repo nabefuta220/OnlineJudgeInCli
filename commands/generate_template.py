@@ -4,6 +4,7 @@
 
 import argparse
 from logging import getLogger
+import pathlib
 from sys import exit as exitwith
 from typing import Dict
 
@@ -30,9 +31,9 @@ def add_subparser(subparser: argparse.Action) -> None:
         'get-contest', help='get problems from contest URL')
     parser_get_contest.add_argument('url', help='contest URL')
     parser_get_contest.add_argument(
-        'contest_name', help='file name as which save')
+        'contest_name', type=pathlib.Path, help='file name as which save')
     parser_get_contest.add_argument(
-        '--config_file', default=CONFIG_FILE, help='config file')
+        '--config_file', type=pathlib.Path, default=CONFIG_FILE, help='config file')
 
 
 def generate(url: str, session: Session) -> Dict[str, str]:

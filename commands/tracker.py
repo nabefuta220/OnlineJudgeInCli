@@ -2,6 +2,7 @@
 提出結果を解析する
 """
 import argparse
+import pathlib
 import re
 import time
 from logging import getLogger
@@ -26,9 +27,9 @@ def add_subparser(subparser: argparse.Action) -> None:
     """
     parser_track = subparser.add_parser(
         'tracker', help='track sumission sesult')
-    parser_track.add_argument('url', help='track URL')
+    parser_track.add_argument('url', type=pathlib.Path, help='track URL')
     parser_track.add_argument(
-        '--config_file', default=CONFIG_FILE, help='config file')
+        '--config_file', type=pathlib.Path, default=CONFIG_FILE, help='config file')
 
 
 def parse(file: str):

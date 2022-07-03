@@ -3,6 +3,7 @@
 """
 import argparse
 from logging import getLogger
+import pathlib
 from typing import Dict
 
 from requests.sessions import Session
@@ -24,11 +25,11 @@ def add_subparser(subparser: argparse.Action) -> None:
     """
     parser_generate = subparser.add_parser('generate',
                                            help='generate template in multiplie problems')
-    parser_generate.add_argument('file',
+    parser_generate.add_argument('file', type=pathlib.Path,
                                  help='jsonfile contained dictionary of prblem ID and problem URL')
-    parser_generate.add_argument('contest_name', help='constest name')
+    parser_generate.add_argument('contest_name', type=pathlib.Path, help='constest name')
     parser_generate.add_argument(
-        '--config_file', default=CONFIG_FILE, help='config file')
+        '--config_file', type=pathlib.Path, default=CONFIG_FILE, help='config file')
 
 
 def generate(problems: Dict[str, str], contest_name: str, config_file: str, session: Session):
