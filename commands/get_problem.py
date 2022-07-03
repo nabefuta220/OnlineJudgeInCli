@@ -7,7 +7,7 @@ import os
 import re
 import sys
 from logging import getLogger
-
+from pathlib import Path
 import bs4
 import requests
 from requests.sessions import Session
@@ -16,7 +16,7 @@ from requests.sessions import Session
 logger = getLogger(__name__)
 
 
-def get_html(url: str, file: str, session: Session, force_rewrite: bool = False):
+def get_html(url: str, file: Path, session: Session, force_rewrite: bool = False):
     """
     問題URLを取得して保存する
 
@@ -24,7 +24,7 @@ def get_html(url: str, file: str, session: Session, force_rewrite: bool = False)
     ----------
     url : str
         問題URL
-    file:str
+    file: Path
         保存先のファイルパス
     session : requests.sessions.Session
         ログイン情報
@@ -47,17 +47,17 @@ def get_html(url: str, file: str, session: Session, force_rewrite: bool = False)
         logger.debug("saved %s as %s", url, file)
 
 
-def parse(infile: str, outfile: str, config_file: str):
+def parse(infile: Path, outfile: Path, config_file: Path):
     """
     問題文にある表現をmarkdown用に変換する
 
     Parameters
     ----------
-    infile : str
+    infile : Path
         変換したいファイルのパス
-    outfile : str
+    outfile : Path
         変換先のファイルのパス
-    config_file : str
+    config_file : Path
         変換法則をまとめたJSONファイル
     """
     # 問題分のhtmlファイルから問題文部分を抽出する
@@ -107,7 +107,7 @@ def parse(infile: str, outfile: str, config_file: str):
         logger.error(error)
 
 
-def get_problem(url: str, file: str, config_file: str, session: Session):
+def get_problem(url: str, file: Path, config_file: Path, session: Session):
     """
     ログインして、問題文を取得する
 
@@ -115,9 +115,9 @@ def get_problem(url: str, file: str, config_file: str, session: Session):
     ----------
     url : str
         問題URL
-    file : str
+    file : Path
         保存先のファイルのパス
-    config_file : str
+    config_file : Path
         変換法則をまとめたJSONファイル
     session : requests.session.Session
         ログイン情報

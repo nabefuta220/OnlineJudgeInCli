@@ -2,7 +2,7 @@
 ファイルのコンパイルと実行を行う
 """
 import argparse
-import pathlib
+from pathlib import Path
 import subprocess
 from logging import getLogger
 import sys
@@ -19,9 +19,9 @@ def add_subparser(subparser: argparse.Action) -> None:
             サブコマンドを格納するパーサー
     """
     parser_build = subparser.add_parser('exe',help='run your code')
-    parser_build.add_argument('file',type=pathlib.Path,help='file to run')
+    parser_build.add_argument('file',type=Path,help='file to run')
 
-def bulid(file:pathlib.Path):
+def bulid(file:Path):
     """
     コンパイルする
 
@@ -41,7 +41,7 @@ def bulid(file:pathlib.Path):
         sys.exit()
 
 
-def exert(file: pathlib.Path):
+def exert(file: Path):
     """
     実行する
 

@@ -2,7 +2,7 @@
 提出結果を解析する
 """
 import argparse
-import pathlib
+from pathlib import Path
 import re
 import time
 from logging import getLogger
@@ -27,18 +27,18 @@ def add_subparser(subparser: argparse.Action) -> None:
     """
     parser_track = subparser.add_parser(
         'tracker', help='track sumission sesult')
-    parser_track.add_argument('url', type=pathlib.Path, help='track URL')
+    parser_track.add_argument('url', type=Path, help='track URL')
     parser_track.add_argument(
-        '--config_file', type=pathlib.Path, default=CONFIG_FILE, help='config file')
+        '--config_file', type=Path, default=CONFIG_FILE, help='config file')
 
 
-def parse(file: str):
+def parse(file: Path):
     """
     提出結果と得点を解析する
 
     Parameters
     ----------
-    file : str
+    file : Path
         提出情報ファイルのパス
 
     Returns
@@ -68,7 +68,7 @@ def parse(file: str):
     return submitte_state
 
 
-def track(url: str, output_file: str, config_file: str = CONFIG_FILE):
+def track(url: str, output_file: Path, config_file: Path = CONFIG_FILE):
     """
     提出結果を解析する
 
@@ -76,9 +76,9 @@ def track(url: str, output_file: str, config_file: str = CONFIG_FILE):
     ----------
     url : str
         提出結果のURL
-    output_file : str
+    output_file : Path
         提出情報の保存するファイルのパス
-    config_file :str (default = CONFIG_FILE)
+    config_file : Path (default = CONFIG_FILE)
         ユーザ情報が乗ったJSONファイルのパス
 
     Returns
