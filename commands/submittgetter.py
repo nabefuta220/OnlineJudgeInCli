@@ -3,7 +3,7 @@
 """
 import re
 from logging import getLogger
-from urllib.request import Request
+
 
 logger = getLogger(__name__)
 
@@ -27,7 +27,7 @@ def get_data():
             res += url + " "
 
 
-def get_submittion_url(source:str):
+def get_submittion_url(source: str):
     """
     標準入力から提出URLを抽出する
 
