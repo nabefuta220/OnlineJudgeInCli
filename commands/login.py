@@ -5,9 +5,10 @@
 
 import argparse
 import json
-import pathlib
+from  pathlib import Path
 from getpass import getpass
 from logging import getLogger
+from urllib.request import Request
 
 import bs4
 import requests
@@ -29,7 +30,7 @@ def add_subparser(subparser: argparse.Action) -> None:
     parser_login = subparser.add_parser(
         'login', help='login to atcoder')
     parser_login.add_argument('--config_file', '-c',
-                              type=pathlib.Path, default=CONFIG_FILE, help='store login info')
+                              type=Path, default=CONFIG_FILE, help='store login info')
 
 
 def ask_user():
@@ -48,15 +49,15 @@ def ask_user():
     return user, password
 
 
-def login(url: str, config_file: str, overwrite: bool = False):
+def login(url: Request, config_file: Path, overwrite: bool = False):
     """
     ログインをする
 
     Parameters
     ----------
-    url: str
+    url: urllib.request.Request
         ログインURL
-    config_file: str
+    config_file: pathlib.Path
         ユーザー情報が乗ったファイルのパス
     overwrite: bool (default  False)
         強制的にユーザー名とパスワードを尋ねる

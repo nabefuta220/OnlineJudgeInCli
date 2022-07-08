@@ -2,9 +2,9 @@
 提出URLを取得して、結果を監視する
 """
 import argparse
-import pathlib
 import subprocess
 from logging import getLogger
+from pathlib import Path
 
 from onlinejudge.utils import default_cookie_path
 
@@ -25,16 +25,16 @@ def add_subparser(subparser: argparse.Action) -> None:
     parser_sub_n_track = subparser.add_parser(
         'subntrack', help='submit your soultion and track your result')
     parser_sub_n_track.add_argument(
-        'file', type=pathlib.Path, help='file to submit')
+        'file', type=Path, help='file to submit')
 
 
-def submittd_n_track(file: str):
+def submittd_n_track(file: Path):
     """
     提出して、結果を見る
 
     Parameters
     ----------
-    file : str
+    file : Path
         提出するソースコードのパス
     """
 

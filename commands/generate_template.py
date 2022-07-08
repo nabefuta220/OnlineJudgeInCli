@@ -4,8 +4,10 @@
 
 import argparse
 from logging import getLogger
+from pathlib import Path
 from sys import exit as exitwith
 from typing import Dict
+from urllib.request import Request
 
 from onlinejudge.dispatch import contest_from_url
 from onlinejudge_api.get_contest import main as onlinejudge_run
@@ -28,14 +30,14 @@ def add_subparser(subparser: argparse.Action) -> None:
     """
     parser_get_contest = subparser.add_parser(
         'get-contest', help='get problems from contest URL')
-    parser_get_contest.add_argument('url', help='contest URL')
+    parser_get_contest.add_argument('url', type=str, help='contest URL')
     parser_get_contest.add_argument(
-        'contest_name', help='file name as which save')
+        'contest_name', type=Path, help='file name as which save')
     parser_get_contest.add_argument(
-        '--config_file', default=CONFIG_FILE, help='config file')
+        '--config_file', type=Path, default=CONFIG_FILE, help='config file')
 
 
-def generate(url: str, session: Session) -> Dict[str, str]:
+def generate(url:str, session: Session) -> Dict[str, str]:
     """
     URLからコンテスト問題を取得する
 

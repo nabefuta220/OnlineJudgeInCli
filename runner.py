@@ -91,7 +91,7 @@ def select_tools(arg: argparse.Namespace):
                 'creat': partial(creat, session=session), 'exe': exe, 'test': test,
                 'submit': submit, 'expand': expand, 'tracker': tracker, 'subntrack': subntrack,
                 'login': login}
-    return funcdict['arg.subcommand']
+    return funcdict[arg.subcommand]
 
 
 def get_contest(arg: argparse.Namespace, session: Session):

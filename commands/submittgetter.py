@@ -4,6 +4,7 @@
 import re
 from logging import getLogger
 
+
 logger = getLogger(__name__)
 
 
@@ -26,7 +27,7 @@ def get_data():
             res += url + " "
 
 
-def get_submittion_url(source:str):
+def get_submittion_url(source: str):
     """
     標準入力から提出URLを抽出する
 
@@ -37,7 +38,7 @@ def get_submittion_url(source:str):
 
     Returns
     -------
-    terget_url :str
+    terget_url : str
         提出情報のURL
     """
     matchobj = re.search(
