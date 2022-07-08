@@ -17,13 +17,13 @@ from requests.sessions import Session
 logger = getLogger(__name__)
 
 
-def get_html(url: Request, file: Path, session: Session, force_rewrite: bool = False):
+def get_html(url: str, file: Path, session: Session, force_rewrite: bool = False):
     """
     問題URLを取得して保存する
 
     Parameters
     ----------
-    url : urllib.request.Request
+    url : str
         問題URL
     file: Path
         保存先のファイルパス

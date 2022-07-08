@@ -38,13 +38,13 @@ def get_submittion_url(source:str):
 
     Returns
     -------
-    terget_url : urllib.request.Request
+    terget_url : str
         提出情報のURL
     """
     matchobj = re.search(
         r'result: \S+', source)
     logger.debug(matchobj.group())
-    terget_url = Request(matchobj.group()[8:])
+    terget_url = matchobj.group()[8:]
     return terget_url
 
 

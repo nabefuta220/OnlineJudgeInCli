@@ -69,13 +69,13 @@ def parse(file: Path):
     return submitte_state
 
 
-def track(url: Request, output_file: Path, config_file: Path = CONFIG_FILE):
+def track(url:str, output_file: Path, config_file: Path = CONFIG_FILE):
     """
     提出結果を解析する
 
     Parameters
     ----------
-    url : urllib.request.Request
+    url : str
         提出結果のURL
     output_file : Path
         提出情報の保存するファイルのパス
