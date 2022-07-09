@@ -48,13 +48,12 @@ def expand(file: Path, ailas: str, config_file: Path):
         インクルードパスをまとめたファイル
     """
     expander, include = get_include_path_with_ailas(ailas, config_file)
-    #TODO: ac-libraryのパスをjsonファイルなどで保存しておく
     command = f"python3 {expander} {file} --lib { include}"
     logger.info(command)
     subprocess.run(shell=True, args=command, check=True)
 
 
-#TODO : config_fileからデータを読み込む系の関数を別ファイルに実装する
+
 def get_include_path_with_ailas(ailas: str, config_file: Path):
     """
     ヘッダーファイルへのパスを別名から取得する

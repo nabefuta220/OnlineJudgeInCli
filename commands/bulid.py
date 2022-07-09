@@ -69,7 +69,6 @@ def bulid(file: Path, config_file: Path):
     """
     # ファイル名を取得
     files = file.stem
-    # TODO:拡張子に合わせて変更できようにする
     include_list = " ".join(get_include_path_list(config_file))
     optional_cpp = f"-std=gnu++17 -Wall -Wextra -O2 -DLOCAL -I {include_list}"
     command = f"g++ {files}.cpp -o {files}.out {optional_cpp}"
@@ -90,6 +89,5 @@ def exert(file: Path):
     """
     logger.info(file)
     files = file.stem
-    # files=os.path.splitext(os.path.basename(file))[0]
     command = f'./{files}.out'
     subprocess.run(shell=True, args=command, check=False)
