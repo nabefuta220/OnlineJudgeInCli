@@ -2,9 +2,14 @@
 cppファイル内にあるac-librayを展開する
 """
 import argparse
+
+import json
 from pathlib import Path
 import subprocess
 from logging import getLogger
+from os.path import dirname
+
+from commands import CONFIG_FILE
 
 
 logger = getLogger(__name__)
@@ -23,22 +28,53 @@ def add_subparser(subparser: argparse.Action) -> None:
         'expand', help='expand AC libray')
     parser_get_contest.add_argument(
         'file', type=Path, help='file to expand')
-    parser_get_contest.add_argument(
-        '--ac-libray_path', dest="incpath", type=Path, default="", help='include path')
+    parser_get_contest.add_argument('ailas',
+                                    type=str, help='ailas of include path')
+    parser_get_contest.add_argument('--config_file', '-c',
+                                    type=Path, default=CONFIG_FILE, help='store include path info')
 
 
-def expand(file:Path, incpath: Path):
+def expand(file: Path, ailas: str, config_file: Path):
     """
-    ac-libaryを展開する
+    ヘッダーファイルを展開する
 
     Parameters
     ----------
     file : Path
         展開するファイルのパス
-    incpath : Path
-        AC-libaryへのパス
+    ailas : str
+        展開ファイル用パスへの別名
+    config_file : pathlib.Path
+        インクルードパスをまとめたファイル
     """
-    # ac-libraryのパスをjsonファイルなどで保存しておく
-    command = f"python3 {incpath}/expander.py {file} --lib {incpath}"
+    expand, include = get_include_path_with_ailas(ailas, config_file)
+    #TODO: ac-libraryのパスをjsonファイルなどで保存しておく
+    command = f"python3 {expand} {file} --lib { include}"
     logger.info(command)
     subprocess.run(shell=True, args=command, check=True)
+
+
+#TODO : config_fileからデータを読み込む系の関数を別ファイルに実装する
+def get_include_path_with_ailas(ailas: str, config_file: Path):
+    """
+    ヘッダーファイルへのパスを別名から取得する
+    Parameters
+    ----------
+    ailas : str
+        展開ファイル用パスへの別名
+    config_file : pathlib.Path
+        インクルードパスをまとめたファイル
+
+    Returns
+    -------
+    expand_file : str
+        展開用ファイルへのパス
+    include_path : str
+        ヘッダーファイルへのパス
+    """
+
+    with open(config_file, 'r', encoding='UTF-8') as config:
+        info = json.load(config)["includePath"]
+        expand_path = info[ailas]
+        include_path = dirname(expand_path)
+    return (expand_path, include_path)
