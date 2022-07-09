@@ -72,13 +72,13 @@ def parse(infile: Path, outfile: Path, config_file: Path):
             if not chose:
                 logger.error("id task-statement not found")
                 sys.exit(1)
-        #問題タイトルを抽出する
+        # 問題タイトルを抽出する
         try:
             string = f"# {soup.title.text}\n\n"
         except AttributeError:
             logger.error("tag<title> not found")
             string = ""
-        #実行時間制限と実行メモリ制限を取得する
+        # 実行時間制限と実行メモリ制限を取得する
         try:
             string += re.search(r'Time Limit: \d+ sec / Memory Limit: \d+ MB',
                                 str(soup)).group()
@@ -97,7 +97,7 @@ def parse(infile: Path, outfile: Path, config_file: Path):
         except KeyError:
             logger.error(
                 "key: convert in config file: % s not found", config_file)
-        #変換した問題分をファイルに書き込む
+        # 変換した問題分をファイルに書き込む
         try:
             with open(outfile, 'w', encoding='UTF-8') as file:
                 file.write(string)

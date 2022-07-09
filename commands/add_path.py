@@ -30,7 +30,7 @@ def add_subparser(subparser: argparse.Action) -> None:
     parser_add.add_argument('--alias', '-a', type=str, default='',
                             help='name to point this include path (use expand command)')
     parser_add.add_argument('--config_file', '-c',
-                            type=Path, default=CONFIG_FILE, help='store login info')
+                            type=Path, default=CONFIG_FILE, help='store include path info')
 
 
 def add_path(new_path: Path, ailas: str, config_file: Path):
@@ -40,7 +40,7 @@ def add_path(new_path: Path, ailas: str, config_file: Path):
     Parameters
     ----------
     new_path : pathlib.Path
-        新しく追加するヘッダーファイルの場所
+        新しく追加するヘッダーファイルの展開ファイルの場所
     ailas : str
         ヘッダーファイルの別名
     config_file : pathlib.Path
@@ -49,7 +49,6 @@ def add_path(new_path: Path, ailas: str, config_file: Path):
     success : bool
         パスの追加が成功したか(すればTrue)
     """
-
     # 引数のパスが存在するか調べる
     new_path = new_path.resolve()
     if new_path.exists():
