@@ -5,7 +5,6 @@
 """
 import argparse
 import json
-from re import sub
 import sys
 from functools import partial
 from logging import INFO, StreamHandler, basicConfig, getLogger
