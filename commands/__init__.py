@@ -1,7 +1,9 @@
 """
 定数など
 """
-import os
-THIS_MODULE=os.path.abspath(f"{__file__}/..")
-CONFIG_FILE=THIS_MODULE+"/../config.json"
+
+from pathlib import Path
+
+THIS_MODULE = Path(__file__).parents[0].resolve()
+CONFIG_FILE = THIS_MODULE.parent / "config.json"
 LOGIN_URL = "https://atcoder.jp/login?continue="
