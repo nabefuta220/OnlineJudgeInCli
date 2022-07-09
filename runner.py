@@ -34,6 +34,8 @@ from commands.submit import add_subparser as add_sub
 from commands.submit import submit as submit_main
 from commands.tracker import add_subparser as add_track
 from commands.tracker import track
+from commands.add_path import add_subparser as add_path
+from commands.add_path import add_path as add_path_main
 
 logger = getLogger(__name__)
 
@@ -62,6 +64,7 @@ def prepara_arg() -> argparse.ArgumentParser:
     add_track(subparser)  # track用
     add_sub_n(subparser)  # sub_n_track用
     add_login(subparser)  # login用
+    add_path(subparser) # add_path用
     return parser
 
 
@@ -90,7 +93,7 @@ def select_tools(arg: argparse.Namespace):
                 'generate': partial(generate, session=session),
                 'creat': partial(creat, session=session), 'exe': exe, 'test': test,
                 'submit': submit, 'expand': expand, 'tracker': tracker, 'subntrack': subntrack,
-                'login': login}
+                'login': login,'addpath':addpath}
     return funcdict[arg.subcommand]
 
 
@@ -151,7 +154,7 @@ def exe(arg: argparse.Namespace):
     arg : argparse.Napespace
         コマンドラインの解析情報
     """
-    bulid(arg.file)
+    bulid(arg.file,arg.config_file)
     exert(arg.file)
 
 
@@ -165,7 +168,7 @@ def test(arg: argparse.Namespace):
         コマンドラインの解析情報
     """
     logger.info(arg)
-    bulid(arg.test[0])
+    bulid(arg.test[0], arg.config_file)
     cheak(arg)
 
 
@@ -190,7 +193,7 @@ def expand(arg: argparse.Namespace):
     arg : argparse.Napespace
         コマンドラインの解析情報
     """
-    expand_main(arg.file, arg.incpath)
+    expand_main(arg.file, arg.ailas, arg.config_file)
 
 
 def tracker(arg: argparse.Namespace):
@@ -233,6 +236,19 @@ def login(arg: argparse.Namespace):
         logger.error('Login Failed. Please retry.')
     else:
         logger.info('Sucessful Logined!')
+
+
+def addpath(arg: argparse.Namespace):
+    """
+    インクルードパスを追加する
+
+    Parameters
+    ----------
+    arg : argparse.Napespace
+        コマンドラインの解析情報
+    """
+    logger.info(arg)
+    add_path_main(arg.include_path, arg.alias, arg.config_file)
 
 
 def main():

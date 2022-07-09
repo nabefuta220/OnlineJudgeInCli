@@ -4,7 +4,7 @@
 import logging
 
 
-if __name__ == '__main__' :
+if __name__ == '__main__':
     logger = logging.getLogger('LoggingTest')
 
     # ログレベルの設定
@@ -13,8 +13,6 @@ if __name__ == '__main__' :
     # ログのコンソール出力の設定
     sh = logging.StreamHandler()
     logger.addHandler(sh)
-
-
 
     # ログの出力形式の設定
     formatter = logging.Formatter(
