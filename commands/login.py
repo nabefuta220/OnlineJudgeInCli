@@ -5,7 +5,7 @@
 
 import argparse
 import json
-from  pathlib import Path
+from pathlib import Path
 from getpass import getpass
 from logging import getLogger
 from urllib.request import Request

@@ -7,7 +7,6 @@ from logging import getLogger
 from pathlib import Path
 from sys import exit as exitwith
 from typing import Dict
-from urllib.request import Request
 
 from onlinejudge.dispatch import contest_from_url
 from onlinejudge_api.get_contest import main as onlinejudge_run
@@ -37,7 +36,7 @@ def add_subparser(subparser: argparse.Action) -> None:
         '--config_file', type=Path, default=CONFIG_FILE, help='config file')
 
 
-def generate(url:str, session: Session) -> Dict[str, str]:
+def generate(url: str, session: Session) -> Dict[str, str]:
     """
     URLからコンテスト問題を取得する
 

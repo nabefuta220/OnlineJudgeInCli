@@ -28,7 +28,8 @@ def add_subparser(subparser: argparse.Action) -> None:
                                            help='generate template in multiplie problems')
     parser_generate.add_argument('file', type=Path,
                                  help='jsonfile contained dictionary of prblem ID and problem URL')
-    parser_generate.add_argument('contest_name', type=Path, help='constest name')
+    parser_generate.add_argument(
+        'contest_name', type=Path, help='constest name')
     parser_generate.add_argument(
         '--config_file', type=Path, default=CONFIG_FILE, help='config file')
 

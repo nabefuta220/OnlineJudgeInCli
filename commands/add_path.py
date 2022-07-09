@@ -45,9 +45,6 @@ def add_path(new_path: Path, ailas: str, config_file: Path):
         ヘッダーファイルの別名
     config_file : pathlib.Path
         インクルードパスをまとめたファイル
-    -------
-    success : bool
-        パスの追加が成功したか(すればTrue)
     """
     # 引数のパスが存在するか調べる
     new_path = new_path.resolve()
@@ -67,8 +64,8 @@ def add_path(new_path: Path, ailas: str, config_file: Path):
             pass
 
     with open(config_file, 'w', encoding='UTF-8') as config:
-        info.setdefault("includePath",{})
+        info.setdefault("includePath", {})
 
-        info["includePath"][ailas]= str(new_path)
+        info["includePath"][ailas] = str(new_path)
         json.dump(info, config, indent=4)
-        logger.info('add %s ad ailas : %s',new_path,ailas)
+        logger.info('add %s ad ailas : %s', new_path, ailas)

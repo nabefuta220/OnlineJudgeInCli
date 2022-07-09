@@ -10,7 +10,9 @@ from onlinejudge_command.subcommand.test import run, add_subparser as add_test
 
 
 logger = getLogger(__name__)
-def add_subparser(subparser:argparse.Action) -> None:
+
+
+def add_subparser(subparser: argparse.Action) -> None:
     """
     ここのサブコマンド用引数を追加する
 
@@ -22,7 +24,7 @@ def add_subparser(subparser:argparse.Action) -> None:
     add_test(subparser)
 
 
-def cheak(subparser:argparse.Namespace):
+def cheak(subparser: argparse.Namespace):
     """
     テストケースを実行する
 
@@ -31,7 +33,6 @@ def cheak(subparser:argparse.Namespace):
     subparser : argparse.Namespace
         引数のパース情報
     """
-    subparser.command=f"./{os.path.splitext(os.path.basename(subparser.test[0]))[0]}.out"
+    subparser.command = f"./{os.path.splitext(os.path.basename(subparser.test[0]))[0]}.out"
     subparser.test.pop()
     run(subparser)
-    
