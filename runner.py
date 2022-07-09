@@ -155,7 +155,7 @@ def exe(arg: argparse.Namespace):
     arg : argparse.Napespace
         コマンドラインの解析情報
     """
-    bulid(arg.file)
+    bulid(arg.file,arg.config_file)
     exert(arg.file)
 
 
@@ -169,7 +169,7 @@ def test(arg: argparse.Namespace):
         コマンドラインの解析情報
     """
     logger.info(arg)
-    bulid(arg.test[0])
+    bulid(arg.test[0], arg.config_file)
     cheak(arg)
 
 
@@ -194,7 +194,7 @@ def expand(arg: argparse.Namespace):
     arg : argparse.Napespace
         コマンドラインの解析情報
     """
-    expand_main(arg.file, arg.incpath)
+    expand_main(arg.file, arg.ailas, arg.config_file)
 
 
 def tracker(arg: argparse.Namespace):
