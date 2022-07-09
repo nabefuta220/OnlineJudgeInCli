@@ -47,9 +47,9 @@ def expand(file: Path, ailas: str, config_file: Path):
     config_file : pathlib.Path
         インクルードパスをまとめたファイル
     """
-    expand, include = get_include_path_with_ailas(ailas, config_file)
+    expander, include = get_include_path_with_ailas(ailas, config_file)
     #TODO: ac-libraryのパスをjsonファイルなどで保存しておく
-    command = f"python3 {expand} {file} --lib { include}"
+    command = f"python3 {expander} {file} --lib { include}"
     logger.info(command)
     subprocess.run(shell=True, args=command, check=True)
 
