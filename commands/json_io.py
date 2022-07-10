@@ -1,11 +1,12 @@
 """
-JSONから値を読み込む関数を実装する
+JSONから値を読み書きを行う関数を実装する
 """
 
 
-import json
+from json import load, dump
 from pathlib import Path
 from os.path import dirname
+from typing import Any
 
 
 def get_config(config_file: Path, key: str):
@@ -21,10 +22,36 @@ def get_config(config_file: Path, key: str):
     Returns
     -------
     value : Any
-        config fileのパスのkeyの値
+        config fileのパスのkeyの値 
+
+    Exceptions
+    KeyError: 
+        そのような属性がなかった時
+    """
+
+    with open(config_file, 'r', encoding='UTF-8') as config:
+        return load(config)[key]
+
+
+def write_config(config_file: Path, key: str, value: Any):
+    """
+    config fileから特定の値を更新する
+
+    Parameters
+    ----------
+    config_file : pathlib.Path
+        config fileのパス
+    key : str
+        書き込みたい属性
+    value: Any
+        書き込みたい値
     """
     with open(config_file, 'r', encoding='UTF-8') as config:
-        return json.load(config)[key]
+        data = load(config)
+    data.setdefault(key, {})
+    data[key] |= value
+    with open(config_file, 'w', encoding='UTF-8') as config:
+        dump(data, config, indent=4)
 
 
 def get_include_path_list(config_file: Path):
@@ -43,7 +70,7 @@ def get_include_path_list(config_file: Path):
     res = []
     try:
         with open(config_file, 'r', encoding='UTF-8') as config:
-            info = json.load(config)["includePath"]
+            info = load(config)["includePath"]
             res = [dirname(value) if key != "" else value for key,
                    value in info.items()]
     except FileNotFoundError:
@@ -70,6 +97,6 @@ def get_include_path_with_ailas(ailas: str, config_file: Path):
     include_path : str
         ヘッダーファイルへのパス
     """
-    expand_path=get_config(config_file,"includePath")[ailas]
+    expand_path = get_config(config_file, "includePath")[ailas]
     include_path = dirname(expand_path)
     return (expand_path, include_path)
