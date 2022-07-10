@@ -9,7 +9,7 @@ import subprocess
 from logging import getLogger
 
 from commands import CONFIG_FILE
-from commands.json_reader import get_include_path_with_ailas
+from commands.json_io import get_include_path_with_ailas
 
 
 logger = getLogger(__name__)

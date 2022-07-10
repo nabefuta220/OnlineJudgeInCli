@@ -4,12 +4,12 @@
 
 
 import argparse
-import json
 from pathlib import Path
 from logging import getLogger
 import sys
 
 from commands import CONFIG_FILE
+from commands.json_io import write_config
 
 logger = getLogger(__name__)
 
@@ -55,14 +55,7 @@ def add_path(new_path: Path, ailas: str, config_file: Path):
         sys.exit(1)
 
     # 設定を読み込む
-    try:
-        with open(config_file, 'r', encoding='UTF-8') as config:
-            info = json.load(config)
 
-    except FileNotFoundError:
-        info={}
-    info.setdefault("includePath", {})
-    info["includePath"][ailas] = str(new_path)
-    with open(config_file, 'w', encoding='UTF-8') as config:
-        json.dump(info, config, indent=4)
-        logger.info('add %s ad ailas : %s', new_path, ailas)
+    write_config(config_file, "includePath", {ailas: str(new_path)})
+
+    logger.info('add %s ad ailas : %s', new_path, ailas)

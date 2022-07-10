@@ -10,7 +10,7 @@ from pathlib import Path
 from urllib.request import Request
 
 from requests.sessions import Session
-from commands.json_reader import get_config
+from commands.json_io import get_config
 
 from commands import CONFIG_FILE
 from commands.get_problem import get_problem

@@ -4,18 +4,16 @@
 
 
 import argparse
-from json import dump
-
-from pathlib import Path
 from getpass import getpass
 from logging import getLogger
+from pathlib import Path
 from urllib.request import Request
 
 import bs4
 import requests
 
 from commands import CONFIG_FILE
-from commands.json_reader import get_config
+from commands.json_io import get_config, write_config
 
 logger = getLogger(__name__)
 
@@ -97,9 +95,9 @@ def login(url: Request, config_file: Path, overwrite: bool = False):
     responce = session.post(url, data=login_info)
     if not responce.ok:
         raise DidnotLogginedError(url)
-    info["user_info"] = {"username": username, "password": password}
-    with open(config_file, 'w', encoding='UTF-8') as config:
-        dump(info, config, indent=4)
+    info = {"username": username, "password": password}
+    write_config(config_file, "user_info", info)
+
     return session
 
 
