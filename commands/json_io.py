@@ -22,10 +22,10 @@ def get_config(config_file: Path, key: str):
     Returns
     -------
     value : Any
-        config fileのパスのkeyの値 
+        config fileのパスのkeyの値
 
     Exceptions
-    KeyError: 
+    KeyError:
         そのような属性がなかった時
     """
 
