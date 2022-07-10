@@ -3,13 +3,13 @@ cppファイル内にあるac-librayを展開する
 """
 import argparse
 
-import json
+
 from pathlib import Path
 import subprocess
 from logging import getLogger
-from os.path import dirname
 
 from commands import CONFIG_FILE
+from commands.json_reader import get_include_path_with_ailas
 
 
 logger = getLogger(__name__)
@@ -51,29 +51,3 @@ def expand(file: Path, ailas: str, config_file: Path):
     command = f"python3 {expander} {file} --lib { include}"
     logger.info(command)
     subprocess.run(shell=True, args=command, check=True)
-
-
-
-def get_include_path_with_ailas(ailas: str, config_file: Path):
-    """
-    ヘッダーファイルへのパスを別名から取得する
-    Parameters
-    ----------
-    ailas : str
-        展開ファイル用パスへの別名
-    config_file : pathlib.Path
-        インクルードパスをまとめたファイル
-
-    Returns
-    -------
-    expand_file : str
-        展開用ファイルへのパス
-    include_path : str
-        ヘッダーファイルへのパス
-    """
-
-    with open(config_file, 'r', encoding='UTF-8') as config:
-        info = json.load(config)["includePath"]
-        expand_path = info[ailas]
-        include_path = dirname(expand_path)
-    return (expand_path, include_path)
