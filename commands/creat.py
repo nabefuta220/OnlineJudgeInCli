@@ -2,14 +2,15 @@
 回答環境を構築する
 """
 import argparse
-import json
-import os
+
+from os import makedirs
 import subprocess
 from logging import getLogger
 from pathlib import Path
 from urllib.request import Request
 
 from requests.sessions import Session
+from commands.json_reader import get_config
 
 from commands import CONFIG_FILE
 from commands.get_problem import get_problem
@@ -50,17 +51,17 @@ def creat(file: Path, config_file: Path, session: Session, url: Request = None):
         問題URL
     """
 
-    os.makedirs(file, exist_ok=True)
+    makedirs(file, exist_ok=True)
 
     try:
-        with open(config_file, encoding='UTF-8', mode='r') as config:
-            presets = json.load(config)["preset"]
-            for file_name in presets.keys():
-                open_file = f"{file}/{file_name}"
-                with open(open_file, encoding='UTF-8', mode="w") as out_file:
-                    for strings in presets[file_name]:
-                        out_file.write(strings + "\n")
-                logger.info("created %s/%s", file, file_name)
+
+        presets = get_config(config_file, "preset")
+        for file_name in presets.keys():
+            open_file = f"{file}/{file_name}"
+            with open(open_file, encoding='UTF-8', mode="w") as out_file:
+                for strings in presets[file_name]:
+                    out_file.write(strings + "\n")
+            logger.info("created %s/%s", file, file_name)
 
     except FileNotFoundError:
         logger.error('configfile : %s not found', config_file)

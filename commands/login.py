@@ -4,7 +4,8 @@
 
 
 import argparse
-import json
+from json import dump
+
 from pathlib import Path
 from getpass import getpass
 from logging import getLogger
@@ -14,6 +15,7 @@ import bs4
 import requests
 
 from commands import CONFIG_FILE
+from commands.json_reader import get_config
 
 logger = getLogger(__name__)
 
@@ -74,12 +76,12 @@ def login(url: Request, config_file: Path, overwrite: bool = False):
     password = None
     info = None
     try:
-        with open(config_file, 'r', encoding='UTF-8') as config:
-            info = json.load(config)
-            username = info["user_info"]["username"]
-            password = info["user_info"]["password"]
-            if overwrite:
-                username, password = ask_user()
+
+        info = get_config(config_file, "user_info")
+        username = info["username"]
+        password = info["password"]
+        if overwrite:
+            username, password = ask_user()
     except FileNotFoundError:
         logger.error("config file :%s not found", config_file)
         with open(config_file, 'w', encoding='UTF-8'):
@@ -95,9 +97,9 @@ def login(url: Request, config_file: Path, overwrite: bool = False):
     responce = session.post(url, data=login_info)
     if not responce.ok:
         raise DidnotLogginedError(url)
+    info["user_info"] = {"username": username, "password": password}
     with open(config_file, 'w', encoding='UTF-8') as config:
-        info["user_info"] = {"username": username, "password": password}
-        json.dump(info, config, indent=4)
+        dump(info, config, indent=4)
     return session
 
 

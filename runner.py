@@ -25,6 +25,7 @@ from commands.generate import add_subparser as add_gen
 from commands.generate import generate as generate_main
 from commands.generate_template import add_subparser as add_gen_temp
 from commands.generate_template import generate as gen_temp
+from commands.json_reader import get_config
 from commands.login import DidnotLogginedError
 from commands.login import add_subparser as add_login
 from commands.login import login as login_main
@@ -64,7 +65,7 @@ def prepara_arg() -> argparse.ArgumentParser:
     add_track(subparser)  # track用
     add_sub_n(subparser)  # sub_n_track用
     add_login(subparser)  # login用
-    add_path(subparser) # add_path用
+    add_path(subparser)  # add_path用
     return parser
 
 
@@ -93,7 +94,7 @@ def select_tools(arg: argparse.Namespace):
                 'generate': partial(generate, session=session),
                 'creat': partial(creat, session=session), 'exe': exe, 'test': test,
                 'submit': submit, 'expand': expand, 'tracker': tracker, 'subntrack': subntrack,
-                'login': login,'addpath':addpath}
+                'login': login, 'addpath': addpath}
     return funcdict[arg.subcommand]
 
 
@@ -154,7 +155,7 @@ def exe(arg: argparse.Namespace):
     arg : argparse.Napespace
         コマンドラインの解析情報
     """
-    bulid(arg.file,arg.config_file)
+    bulid(arg.file, arg.config_file)
     exert(arg.file)
 
 
@@ -248,6 +249,9 @@ def addpath(arg: argparse.Namespace):
         コマンドラインの解析情報
     """
     logger.info(arg)
+    if arg.include_path is None:
+        print(get_config(arg.config_file, "includePath"))
+        sys.exit(0)
     add_path_main(arg.include_path, arg.alias, arg.config_file)
 
 

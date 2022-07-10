@@ -60,12 +60,9 @@ def add_path(new_path: Path, ailas: str, config_file: Path):
             info = json.load(config)
 
     except FileNotFoundError:
-        with open(config_file, 'w', encoding='UTF-8'):
-            pass
-
+        info={}
+    info.setdefault("includePath", {})
+    info["includePath"][ailas] = str(new_path)
     with open(config_file, 'w', encoding='UTF-8') as config:
-        info.setdefault("includePath", {})
-
-        info["includePath"][ailas] = str(new_path)
         json.dump(info, config, indent=4)
         logger.info('add %s ad ailas : %s', new_path, ailas)

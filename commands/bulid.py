@@ -2,8 +2,6 @@
 ファイルのコンパイルと実行を行う
 """
 import argparse
-import json
-from os.path import dirname
 from pathlib import Path
 import subprocess
 from logging import getLogger
@@ -11,6 +9,7 @@ import sys
 
 
 from commands import CONFIG_FILE
+from commands.json_reader import get_include_path_list
 
 logger = getLogger(__name__)
 
@@ -30,30 +29,7 @@ def add_subparser(subparser: argparse.Action) -> None:
                               type=Path, default=CONFIG_FILE, help='store include path info')
 
 
-def get_include_path_list(config_file: Path):
-    """
-    現在のインクルードパスのリストを取得する
 
-    Parameters
-    ----------
-    config_file : pathlib.Path
-        インクルードファイルのパス
-    Returns
-    -------
-    include_path_list : [str]
-        インクルードパスのリスト(ディレクトリで返す)
-    """
-    res = []
-    try:
-        with open(config_file, 'r', encoding='UTF-8') as config:
-            info = json.load(config)["includePath"]
-            res = [dirname(value) if key != "" else value for key,
-                   value in info.items()]
-    except FileNotFoundError:
-        pass
-    except KeyError:
-        pass
-    return res
 
 
 def bulid(file: Path, config_file: Path):

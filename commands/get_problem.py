@@ -2,16 +2,18 @@
 問題文を整形する
 """
 # pylint: disable=R0915
-import json
+
 import os
 import re
 import sys
 from logging import getLogger
 from pathlib import Path
 from urllib.request import Request
-import bs4
-import requests
+from bs4 import BeautifulSoup
+from requests.exceptions import HTTPError
 from requests.sessions import Session
+
+from commands.json_reader import get_config
 
 
 logger = getLogger(__name__)
@@ -39,9 +41,9 @@ def get_html(url: str, file: Path, session: Session, force_rewrite: bool = False
             with open(file, 'w', encoding='UTF-8') as write_file:
                 source = session.get(url)
                 source.raise_for_status()
-                soup = bs4.BeautifulSoup(source.text, "html.parser")
+                soup = BeautifulSoup(source.text, "html.parser")
                 write_file.write(str(soup))
-        except requests.exceptions.HTTPError as error:
+        except HTTPError as error:
             logger.error(error)
             os.remove(file)
             sys.exit(error)
@@ -64,7 +66,7 @@ def parse(infile: Path, outfile: Path, config_file: Path):
     # 問題分のhtmlファイルから問題文部分を抽出する
     try:
         with open(infile, 'r', encoding='UTF-8') as file:
-            soup = bs4.BeautifulSoup(file, "html.parser")
+            soup = BeautifulSoup(file, "html.parser")
         chose = soup.select('.lang-ja')
         if not chose:
             logger.error("class leng-ja not found")
@@ -88,10 +90,10 @@ def parse(infile: Path, outfile: Path, config_file: Path):
         string += f"\n\n{chose[0]}"
         # ファイルから変換法則を読み込み、変換する
         try:
-            with open(config_file, encoding='UTF-8', mode='r')as config:
-                convert = json.load(config)["convert"]
-                for search, replace in convert.items():
-                    string = re.sub(search, replace, string)
+
+            convert = get_config(config_file, "convert")
+            for search, replace in convert.items():
+                string = re.sub(search, replace, string)
         except FileNotFoundError:
             logger.error('configfile : %s not found', config_file)
         except KeyError:
