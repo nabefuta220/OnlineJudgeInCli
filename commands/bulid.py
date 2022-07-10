@@ -9,7 +9,7 @@ import sys
 
 
 from commands import CONFIG_FILE
-from commands.json_reader import get_include_path_list
+from commands.json_io import get_include_path_list
 
 logger = getLogger(__name__)
 

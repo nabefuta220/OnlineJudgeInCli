@@ -25,7 +25,7 @@ from commands.generate import add_subparser as add_gen
 from commands.generate import generate as generate_main
 from commands.generate_template import add_subparser as add_gen_temp
 from commands.generate_template import generate as gen_temp
-from commands.json_reader import get_config
+from commands.json_io import get_config
 from commands.login import DidnotLogginedError
 from commands.login import add_subparser as add_login
 from commands.login import login as login_main
@@ -250,7 +250,10 @@ def addpath(arg: argparse.Namespace):
     """
     logger.info(arg)
     if arg.include_path is None:
-        print(get_config(arg.config_file, "includePath"))
+        try:
+            print(get_config(arg.config_file, "includePath"))
+        except KeyError:
+            print("")
         sys.exit(0)
     add_path_main(arg.include_path, arg.alias, arg.config_file)
 

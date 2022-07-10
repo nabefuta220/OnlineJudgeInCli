@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 from requests.exceptions import HTTPError
 from requests.sessions import Session
 
-from commands.json_reader import get_config
+from commands.json_io import get_config
 
 
 logger = getLogger(__name__)
