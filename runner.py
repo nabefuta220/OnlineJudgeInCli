@@ -12,7 +12,9 @@ from logging import INFO, StreamHandler, basicConfig, getLogger
 from onlinejudge_command import log_formatter
 from requests import Session
 
-from commands import LOGIN_URL
+from commands import CONFIG_FILE, LOGIN_URL
+from commands.add_path import add_path as add_path_main
+from commands.add_path import add_subparser as add_path
 from commands.bulid import add_subparser as add_build
 from commands.bulid import bulid, exert
 from commands.cheak import add_subparser as add_cheak
@@ -35,8 +37,6 @@ from commands.submit import add_subparser as add_sub
 from commands.submit import submit as submit_main
 from commands.tracker import add_subparser as add_track
 from commands.tracker import track
-from commands.add_path import add_subparser as add_path
-from commands.add_path import add_path as add_path_main
 
 logger = getLogger(__name__)
 
@@ -169,7 +169,7 @@ def test(arg: argparse.Namespace):
         コマンドラインの解析情報
     """
     logger.info(arg)
-    bulid(arg.test[0], arg.config_file)
+    bulid(arg.test[0], CONFIG_FILE)
     cheak(arg)
 
 
