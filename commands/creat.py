@@ -7,8 +7,6 @@ from os import makedirs
 import subprocess
 from logging import getLogger
 from pathlib import Path
-from urllib.request import Request
-
 from requests.sessions import Session
 from commands.json_io import get_config
 
@@ -32,10 +30,10 @@ def add_subparser(subparser: argparse.Action) -> None:
     parser_create.add_argument(
         'file', type=Path, help='path to creat environment')
     parser_create.add_argument('--config_file', '-c', default=CONFIG_FILE)
-    parser_create.add_argument('-u', '--url', type=Request, help='problem URL')
+    parser_create.add_argument('-u', '--url', type=str, help='problem URL')
 
 
-def creat(file: Path, config_file: Path, session: Session, url: Request = None):
+def creat(file: Path, config_file: Path, session: Session, url: str = None):
     """
     問題回答環境を作成する
 
@@ -47,7 +45,7 @@ def creat(file: Path, config_file: Path, session: Session, url: Request = None):
         環境を作るための初期ファイルの情報
     session : Requests.session.Session
         ログイン情報
-    url : urllib.request  (default = None)
+    url : str  (default = None)
         問題URL
     """
 
