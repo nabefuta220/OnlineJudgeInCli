@@ -4,6 +4,7 @@
 
 
 import argparse
+import re
 from getpass import getpass
 from logging import getLogger
 from pathlib import Path
@@ -74,12 +75,12 @@ def login(url: Request, config_file: Path, overwrite: bool = False):
     password = None
     info = None
     try:
-
+        if overwrite:
+            username, password = ask_user()
         info = get_config(config_file, "user_info")
         username = info["username"]
         password = info["password"]
-        if overwrite:
-            username, password = ask_user()
+
     except FileNotFoundError:
         logger.error("config file :%s not found", config_file)
         with open(config_file, 'w', encoding='UTF-8'):
@@ -92,13 +93,35 @@ def login(url: Request, config_file: Path, overwrite: bool = False):
         "username": username,
         "password": password,
     }
+
     responce = session.post(url, data=login_info)
-    if not responce.ok:
+
+    if not responce.ok or not det_logined(responce.text, username):
         raise DidnotLogginedError(url)
     info = {"username": username, "password": password}
     write_config(config_file, "user_info", info)
 
     return session
+
+
+def det_logined(text: str, user: str):
+    """
+    ログインできたかを判断する
+
+    Parameters
+    ----------
+    text : str
+        ログイン後のhttpソース
+    user : str
+        ログインしようとしているユーザー名
+
+    Returns
+    ------
+    logined : textに"Welcome, {user}."が含まれればTrue,そうでなければFalse
+    """
+    target = f'Welcome, {str(user)}.'
+    res = re.search(target, text)
+    return res is not None
 
 
 class DidnotLogginedError(Exception):
