@@ -19,12 +19,14 @@ def get_config(config_file: Path, key: str):
         config fileのパス
     key : str
         取り出したい値
+
     Returns
     -------
     value : Any
         config fileのパスのkeyの値
 
     Exceptions
+    ----------
     KeyError:
         そのような属性がなかった時
     """
