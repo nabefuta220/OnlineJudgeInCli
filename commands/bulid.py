@@ -48,7 +48,7 @@ def bulid(file: Path, config_file: Path):
     try:
         subprocess.run(shell=True, args=command, check=True)
     except subprocess.CalledProcessError as error:
-        logger.error(f"build finished with returncode {error.returncode}.")
+        logger.error("build finished with returncode %s.",(error.returncode))
         sys.exit()
 
 
