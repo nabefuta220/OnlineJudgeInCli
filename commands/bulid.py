@@ -64,4 +64,8 @@ def exert(file: Path):
     logger.info(file)
     files = file.stem
     command = f'./{files}.out'
-    subprocess.run(shell=True, args=command, check=False)
+    try:
+        subprocess.run(shell=True, args=command, check=False)
+    except KeyboardInterrupt:
+        print()
+        logger.error("KeyboardInterrupted")
