@@ -2,11 +2,10 @@
 ファイルのコンパイルと実行を行う
 """
 import argparse
-from pathlib import Path
 import subprocess
-from logging import getLogger
 import sys
-
+from logging import getLogger
+from pathlib import Path
 
 from commands import CONFIG_FILE
 from commands.json_io import get_include_path_list
@@ -29,9 +28,6 @@ def add_subparser(subparser: argparse.Action) -> None:
                               type=Path, default=CONFIG_FILE, help='store include path info')
 
 
-
-
-
 def bulid(file: Path, config_file: Path):
     """
     コンパイルする
@@ -49,8 +45,10 @@ def bulid(file: Path, config_file: Path):
     optional_cpp = f"-std=gnu++17 -Wall -Wextra -O2 -DLOCAL -I {include_list}"
     command = f"g++ {files}.cpp -o {files}.out {optional_cpp}"
     logger.info(command)
-    res = subprocess.run(shell=True, args=command, check=True)
-    if res.returncode != 0:
+    try:
+        subprocess.run(shell=True, args=command, check=True)
+    except subprocess.CalledProcessError as error:
+        logger.error(f"build finished with returncode {error.returncode}.")
         sys.exit()
 
 
