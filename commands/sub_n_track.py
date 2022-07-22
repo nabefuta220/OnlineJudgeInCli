@@ -38,7 +38,7 @@ def submittd_n_track(file: Path):
         提出するソースコードのパス
     """
 
-    tmp_file = f"{THIS_MODULE}/../res.tmp"
+    tmp_file = THIS_MODULE.parent /"res.tmp"
     logger.info(tmp_file)
     args = argparse.Namespace(url=None, file=file, open=False, cookie=default_cookie_path,
                               language=None,   guess=True, guess_cxx_latest=True,
@@ -57,4 +57,6 @@ def submittd_n_track(file: Path):
 
     url = submittgetter.get_submittion_url(res)
     logger.info("submittion: %s", url)
-    print(tracker.track(url=url,  output_file='tmp.html'))
+    result = tracker.track(url=url,  output_file='tmp.html')
+    result["problem"]=file.resolve().parents[0].name
+    print(result)

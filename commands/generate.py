@@ -5,7 +5,6 @@ import argparse
 from logging import getLogger
 from pathlib import Path
 from typing import Dict
-from urllib.request import Request
 
 from requests.sessions import Session
 
@@ -34,13 +33,13 @@ def add_subparser(subparser: argparse.Action) -> None:
         '--config_file', type=Path, default=CONFIG_FILE, help='config file')
 
 
-def generate(problems: Dict[str, Request], contest_name: Path, config_file: Path, session: Session):
+def generate(problems: Dict[str, str], contest_name: Path, config_file: Path, session: Session):
     """
     コンテスト名と問題名、URLを読み込み、コンテスト名のディレクトリに回答用環境をいれる
 
     Parameters
     ----------
-    problems:dict[str,urllib.request.Request]
+    problems:dict[str,str]
         問題名とそのURLの辞書
     contest_name: Path
         保存するファイル名
@@ -51,5 +50,5 @@ def generate(problems: Dict[str, Request], contest_name: Path, config_file: Path
     """
 
     for folder, url in problems.items():
-        creat(file=f"{contest_name}/{folder}", url=url,
+        creat(file=contest_name/folder, url=url,
                    config_file=config_file, session=session)

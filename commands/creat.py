@@ -55,7 +55,7 @@ def creat(file: Path, config_file: Path, session: Session, url: str = None):
 
         presets = get_config(config_file, "preset")
         for file_name in presets.keys():
-            open_file = f"{file}/{file_name}"
+            open_file = file/str(file_name)
             with open(open_file, encoding='UTF-8', mode="w") as out_file:
                 for strings in presets[file_name]:
                     out_file.write(strings + "\n")

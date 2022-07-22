@@ -9,6 +9,8 @@ from os.path import dirname
 from typing import Any
 
 
+
+
 def get_config(config_file: Path, key: str):
     """
     config fileから特定の変数を取り出す
@@ -17,7 +19,7 @@ def get_config(config_file: Path, key: str):
     ----------
     config_file : pathlib.Path
         config fileのパス
-    key : str
+    key : str or None
         取り出したい値
 
     Returns
@@ -32,10 +34,12 @@ def get_config(config_file: Path, key: str):
     """
 
     with open(config_file, 'r', encoding='UTF-8') as config:
+        if key is None:
+            return load(config)
         return load(config)[key]
 
 
-def write_config(config_file: Path, key: str, value: Any):
+def write_config(config_file: Path, key: str, value: Any, mode: str = "u"):
     """
     config fileから特定の値を更新する
 
@@ -47,11 +51,18 @@ def write_config(config_file: Path, key: str, value: Any):
         書き込みたい属性
     value: Any
         書き込みたい値
+    mode : str , (default u)
+        追加モード
+        u : 更新
+        a : 追加
     """
     with open(config_file, 'r', encoding='UTF-8') as config:
         data = load(config)
     data.setdefault(key, {})
-    data[key] |= value
+    if mode == "u":
+        data[key] |= value
+    elif mode == "a":
+        data[key].append(value)
     with open(config_file, 'w', encoding='UTF-8') as config:
         dump(data, config, indent=4)
 
@@ -72,7 +83,7 @@ def get_include_path_list(config_file: Path):
     res = []
     try:
         with open(config_file, 'r', encoding='UTF-8') as config:
-            info = load(config)["includePath"]
+            info = get_config(config, "includePath")
             res = [dirname(value) if key != "" else value for key,
                    value in info.items()]
     except FileNotFoundError:
