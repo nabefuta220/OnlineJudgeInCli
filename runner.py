@@ -5,14 +5,15 @@
 """
 import argparse
 import json
+
 import sys
 from functools import partial
-from logging import INFO, StreamHandler, basicConfig, getLogger
+from logging import DEBUG, INFO, FileHandler, StreamHandler, basicConfig, getLogger
 
 from onlinejudge_command import log_formatter
 from requests import Session
 
-from commands import CONFIG_FILE, LOGIN_URL
+from commands import CONFIG_FILE, LOGIN_URL, THIS_MODULE
 from commands.add_path import add_path as add_path_main
 from commands.add_path import add_subparser as add_path
 from commands.bulid import add_subparser as add_build
@@ -83,7 +84,7 @@ def select_tools(arg: argparse.Namespace):
     func : function
         選択された関数
     """
-    print(arg.subcommand)
+    logger.debug(arg.subcommand)
     # ログインする
     try:
         session = login_main(url=f"{LOGIN_URL}{arg.url}",
@@ -258,6 +259,23 @@ def addpath(arg: argparse.Namespace):
     add_path_main(arg.include_path, arg.alias, arg.config_file)
 
 
+def main_runer():
+    """
+    呼び出し元のメソッド
+    """
+    level = DEBUG
+    handler = StreamHandler(sys.stdout)
+    handler.setFormatter(log_formatter.LogFormatter())
+
+    basicConfig(level=level, handlers=[handler])
+    
+    logger.debug("a")
+    logger.info("a")
+    prase = prepara_arg()
+    arg = prase.parse_args()
+    func = select_tools(arg)
+    func(arg)
+
 def main():
     """
     呼び出し元のメソッド
@@ -265,7 +283,11 @@ def main():
     level = INFO
     handler = StreamHandler(sys.stdout)
     handler.setFormatter(log_formatter.LogFormatter())
+
     basicConfig(level=level, handlers=[handler])
+
+    logger.debug("a")
+    logger.info("a")
     prase = prepara_arg()
     arg = prase.parse_args()
     func = select_tools(arg)
